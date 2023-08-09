@@ -19,7 +19,11 @@ module.exports = class HouseholdsController{
                 res.status(400).json({messge:"Invalid/Empty district name!"})
             }else{
                 await this.household.initialize()
-                const households = await this.household.Read({Section, District})
+                const households = await this.household.Read({
+                    Section, 
+                    District, 
+                    Name_Of_Households_Head:{$ne:null}
+                })
 
                 const villages = []
                 for(let i = 0; i < households.length; i++){
