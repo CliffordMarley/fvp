@@ -15,7 +15,7 @@ app.use(express.json({limit:'50mb'}))
 //Setup configurations
 dotenv.config()
 app.set('trust proxy', 1) // trust first proxy
-app.set('port', process.env.SERVER_PORT || 8080)
+app.set('port', 6000)
 
 //Setup routes
 app = configureAppRoutes(app)
