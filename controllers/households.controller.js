@@ -11,7 +11,7 @@ module.exports = class HouseholdsController{
     readBySection = async (req, res)=>{
         try{
             const Section = req.params.SectionName
-            const District = req.params.DistrictName.toUpperCase()
+            const District = req.params.DistrictName
 
             if(!Isset(Section)){
                 res.status(400).json({messge:"Invalid/Empty section name!"})
@@ -22,7 +22,7 @@ module.exports = class HouseholdsController{
                 const households = await this.household.Read({
                     Section, 
                     District, 
-                    Name_Of_Households_Head:{$ne:null}
+                    Name_Of_Household_Head:{$ne:null}
                 })
 
                 const villages = []
