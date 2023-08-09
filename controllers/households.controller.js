@@ -11,11 +11,15 @@ module.exports = class HouseholdsController{
     readBySection = async (req, res)=>{
         try{
             const Section = req.params.SectionName
+            const District = req.params.District
+
             if(!Isset(Section)){
                 res.status(400).json({messge:"Invalid/Empty section name!"})
+            }else if(!Isset(District)){
+                res.status(400).json({messge:"Invalid/Empty district name!"})
             }else{
                 await this.household.initialize()
-                const households = await this.household.Read({Section})
+                const households = await this.household.Read({Section, District})
 
                 const villages = []
                 for(let i = 0; i < households.length; i++){
