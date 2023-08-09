@@ -21,8 +21,7 @@ module.exports = class HouseholdsController{
                 await this.household.initialize()
                 const filter = {
                     Section, 
-                    District, 
-                    Name_Of_Household_Head:{$ne:null}
+                    District
                 }
                 console.log(filter)
                 const households = await this.household.Read(filter)
