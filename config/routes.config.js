@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {restAuth} = require('../config/session')
+
 
 configureAppRoutes = (app)=>{
 
@@ -8,8 +8,8 @@ configureAppRoutes = (app)=>{
    const sectionRoutes = require('../routes/sections.routes')(router)
     
    app.use('/api/v1/', usersRoutes)
-   app.use('/api/v1/',restAuth, householdRoutes)
-   app.use('/api/v1/',restAuth, sectionRoutes)
+   app.use('/api/v1/', householdRoutes)
+   app.use('/api/v1/', sectionRoutes)
 
     app.use('*', (req, res)=>{
         res.status(404).send({

@@ -1,17 +1,27 @@
 
 const HouseHoldModel = require('../models/household.model')
 const {validateHouseholdData, validateHouseholdKeys, Isset} = require('../helpers/validation.helpers')
+const Event = require('../models/event.model')
 
 module.exports = class HouseholdsController{
 
     constructor(){
+        this.event = new Event()
+        this.actions = [
+            "Syncronized households!",
+            "Failed to syncronize households!",
+            "Updated a household!",
+            "Failed to update a household!"
+        ]
         this.household = new HouseHoldModel()
     }
 
     readBySection = async (req, res)=>{
         try{
+            console.log(req.username)
             const Section = req.params.SectionName
             const District = req.params.DistrictName
+            
 
             if(!Isset(Section)){
                 res.status(400).json({messge:"Invalid/Empty section name!"})
@@ -40,9 +50,11 @@ module.exports = class HouseholdsController{
                         villages
                     }
                 })
+                this.event.Log(req.username, this.actions[0])
             }            
         }catch(err){
             console.log(err)
+            this.event.Log(req.username, this.actions[1], err)
             res.status(500).json({
                 message:err.message
             })
@@ -63,9 +75,11 @@ module.exports = class HouseholdsController{
                 res.status(200).json({
                     message:"Farmer profile updated successfuly!"
                 })
+                this.event.Log(req.username, this.actions[2])
             }            
         }catch(err){
             console.log(err)
+            this.event.Log(req.username, this.actions[3])
             res.status(500).json({
                 message:err.message
             })

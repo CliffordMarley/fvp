@@ -2,20 +2,21 @@ const {verifyJSONWebToken} = require('../helpers/auth.helper')
 
 const restAuth = (req, res, next)=>{
     try{
+        console.log(req.headers)
         if(!req.headers.authorization){
             res.status(401).json({message:"Unauthorized!"})
             return
         }
         const token = req.headers.authorization.split(' ')[1]
         const decoded = verifyJSONWebToken(token)
-        console.log(decoded)
+        req.username =decoded.data.Phone_Number
+
 
         if(!decoded){
             res.status(401).json({message:"Unauthorized!"})
-            return
-        }
-
-        next()
+        }else{
+            next()
+        }        
 
     }catch(err){
         res.status(401).json({
