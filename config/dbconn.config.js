@@ -3,8 +3,7 @@ const { MongoClient } = require('mongodb');
 class MongoDBConnection {
   constructor(dbName) {
     this.dbName = dbName;
-    this.url = "mongodb+srv://nrbuser:nrbuser@nrb-applications-cluste.ixplqm3.mongodb.net/?retryWrites=true&w=majority"
-    // this.url = 'mongodb://127.0.0.1:27017';
+    this.url = 'mongodb://127.0.0.1:27017';
     this.client = null;
     this.db = null;
   }
