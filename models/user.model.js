@@ -2,7 +2,7 @@ const MongoDBConnection = require("../config/dbconn.config");
 
 module.exports = class HouseholdModel {
     constructor() {
-        this.dbConnection = new MongoDBConnection('FPV');
+        this.dbConnection = new MongoDBConnection('aip_validator');
         this.collection = null;
     }
 
