@@ -18,6 +18,9 @@ app.set('trust proxy', 1) // trust first proxy
 app.set('port', 8080)
 
 //Setup routes
+app.get('/status', (req, res)=>{
+    res.json({status:"Success!"})
+})
 app = configureAppRoutes(app)
 
 //Launch Application
