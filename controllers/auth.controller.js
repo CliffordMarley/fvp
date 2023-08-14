@@ -15,6 +15,7 @@ module.exports = class Auth{
         try{
             console.log('Authenticating...')
             const {Username, Password} = req.body
+            Password = Password.toString()
             console.table({Username, Password})
 
             if(!Username || !Password){
