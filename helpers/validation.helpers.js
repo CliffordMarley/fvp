@@ -36,7 +36,6 @@ function validateHouseholdKeys(data) {
         "In_Poutry_Farming",
         "Land_Ownership_Type",
         "Last_Season_Production",
-        "Livestock_Type",
         "Major_Enterprize",
         "NRB_Validation",
         "Name_Of_Household_Head",
