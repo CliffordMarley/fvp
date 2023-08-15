@@ -20,17 +20,56 @@ function validateHouseholdData(data) {
 }
 
 function validateHouseholdKeys(data) {
-    const requiredKeys = ["_id", "National_ID", "Name_Of_Household_Head", "Spouse_Name", "Spouse_NID", "Sex", "Village", "Section", "District", "ADD", "Farmer_Organization", "FO_Type", "Major_Enterprize", "NM_Tracker_Id", "Coordinates", "Total_Farm_Land_Size", "In_Irrigated_Farming", "In_Rain_Fed_Farming", "In_Crop_Farming", "In_Fisheries_Farming", "In_Livestock_Farming", "In_Rainfed_Farming", "In_Crop_Enterprise", "In_Fisheries_Enterprise", "In_Livestock_Enterprise", "GVA", "TA", "Support_Program", "Support_Type", "Fit_For_Work", "HH_Number", "Has_Farm_Land", "Mobile_Number", "PMT_Score", "Role", "UBR_Arable_Land_Owned", "UBR_Arable_Land_Used", "UBR_Assisted", "UBR_Commercial_Acres", "UBR_InOrganic_Fertilizer", "UBR_Irrigated_Land_Acres", "UBR_Land_Ownership_Type", "UBR_Organic_Fertilizer", "UBR_Poutry", "UBR_Total_Land_Owned", "UBR_Wet_Land_Owned", "UBR_Wet_Land_Used", "Wealth_Quantile"];
+    const requiredKeys = [
+        "ADD",
+        "Constituency",
+        "Coordinates",
+        "District",
+        "EPA",
+        "FO_Type",
+        "Farmer_Organization",
+        "Farming_Water_Source",
+        "Fertilizer_Utilization",
+        "Fit_For_Work",
+        "GVH",
+        "In_Fisheries_Farming",
+        "In_Livestock_Farming",
+        "In_Poutry_Farming",
+        "Land_Ownership_Type",
+        "Last_Season_Production",
+        "Livestock_Type",
+        "Major_Enterprize",
+        "NRB_Validation",
+        "Name_Of_Household_Head",
+        "National_ID",
+        "Purpose_Of_Production",
+        "Section",
+        "Sex",
+        "Spouse_NID",
+        "Spouse_Name",
+        "Support_Program",
+        "Support_Type",
+        "TA",
+        "Total_Arable_Land_Size",
+        "Total_Arable_Land_Used",
+        "Updated",
+        "Updated_By",
+        "Village",
+        "_id"
+    ]
 
-    const missingKeys = requiredKeys.filter(key => !Object.prototype.hasOwnProperty.call(data, key));
-
+    const missingKeys = requiredKeys.filter(key => {
+        // Check if the key is missing or if the value is not false
+        return !Object.prototype.hasOwnProperty.call(data, key) && data[key] !== false;
+    });
+    
     if (missingKeys.length > 0) {
-        return false
-        //return `The following fields are missing: ${missingKeys.join(', ')}`;
+        return false;
+        // return `The following fields are missing: ${missingKeys.join(', ')}`;
     }
-
-    //return "All required fields are present!";
-    return true
+    
+    // return "All required fields are present!";
+    return true;
 }
 
 
