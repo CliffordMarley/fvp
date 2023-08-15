@@ -59,8 +59,8 @@ function validateHouseholdKeys(data) {
     ]
 
     const missingKeys = requiredKeys.filter(key => {
-        // Check if the key is missing or if the value is not false
-        return !Object.prototype.hasOwnProperty.call(data, key) && data[key] !== false;
+        // Check if the key is missing or if the value is null or not false
+        return !Object.prototype.hasOwnProperty.call(data, key) || data[key] === null || data[key] === undefined || (typeof data[key] === 'boolean' && data[key] !== false);
     });
     
     if (missingKeys.length > 0) {
@@ -70,6 +70,7 @@ function validateHouseholdKeys(data) {
     
     // return "All required fields are present!";
     return true;
+    
 }
 
 
