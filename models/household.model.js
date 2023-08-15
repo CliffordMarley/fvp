@@ -44,15 +44,22 @@ module.exports = class HouseholdModel {
             if (!this.collection) {
                 throw new Error('Collection not initialized. Call initialize() before using the model.');
             }
-
+    
             const filter = { National_ID };
-            const updateData = { $set: data };
+            
+            // Exclude _id from the update data
+            const updateData = { $set: { ...data } };
+            delete updateData.$set._id; // Make sure _id is not included
+    
             const options = { returnOriginal: false };
-
+    
             const result = await this.collection.findOneAndUpdate(filter, updateData, options);
             return result.value;
         } catch (err) {
             throw err;
         }
     }
+    
+
+
 }
