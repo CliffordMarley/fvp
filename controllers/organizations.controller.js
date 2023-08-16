@@ -25,10 +25,10 @@ module.exports = class HouseholdsController{
                 let Section = sections[0]
                 let EPAs = await this.epa.Read({EPACode:this.section.EPA})[0]
                 let District = await this.district.Read({District_Code: EPAs.District})[0]
-                let TAs = await this.ta.Read({District:EPAs.District})
+                let TAs = await this.district.Read({District:EPAs.District})
 
                 let villages = []
-                
+
                 for(ta of TAs){
                     let villagesRead = await this.villages.Read({TACode:ta.TACode})
                     villages = villages.concat(villagesRead)
