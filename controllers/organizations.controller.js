@@ -36,6 +36,8 @@ module.exports = class HouseholdsController{
 
                 let Constituencies = await this.constituency.Read({"DISTRICT": District.District_Name.toUpperCase()})
 
+                console.log(Constituencies)
+
                 let TAs = await this.ta.Read({District:EPAs.District})
 
                 let villages = []
