@@ -17,6 +17,7 @@ module.exports = class HouseholdsController{
     Read = async (req, res)=>{
         try{
             const filter = req.params
+            console.log(filter)
             
             //Find section
             const sections = await this.section.Read(filter)
@@ -42,7 +43,7 @@ module.exports = class HouseholdsController{
 
                 res.json(organizationUnit)
             }else{
-                res.statu(404).json({message:"Invalid Section Code!"})
+                res.status(404).json({message:"Invalid Section Code!"})
             }
         }catch(err){
             res.status(500).json({
