@@ -5,9 +5,13 @@ const VillageModel = require("../models/village.model")
 const DistrictModel = require("../models/district.model")
 const ConstituencyModel = require("../models/constituency.model")
 
+const Event = require('../models/event.model')
+
 module.exports = class HouseholdsController{
 
     constructor(){
+        this.event = new Event()
+        
         this.section = new SectionModel()
         this.ta = new TAModel()
         this.epa = new EPAModel()

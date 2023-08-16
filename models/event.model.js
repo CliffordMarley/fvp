@@ -1,5 +1,5 @@
 const MongoDBConnection = require("../config/dbconn.config");
-
+const moment = require("moment")
 module.exports = class HouseholdModel {
     constructor() {
         this.dbConnection = new MongoDBConnection('aip_validator');
@@ -44,7 +44,7 @@ module.exports = class HouseholdModel {
             
             if(!username && !event) return 
 
-            const eventlog = {username, event, extra}
+            const eventlog = {username, event, timestamp:moment().format('MMMM Do YYYY, h:mm:ss a')}
             const document = await this.collection.insertOne(eventlog);
             console.log(`AEDO ${username} ${event}!`)
             return document;
