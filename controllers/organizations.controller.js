@@ -3,6 +3,7 @@ const TAModel = require('../models/ta.model')
 const EPAModel = require('../models/epa.model')
 const VillageModel = require("../models/village.model")
 const DistrictModel = require("../models/district.model")
+const ConstituencyModel = require("../models/constituency.model")
 
 module.exports = class HouseholdsController{
 
@@ -12,6 +13,7 @@ module.exports = class HouseholdsController{
         this.epa = new EPAModel()
         this.village = new VillageModel()
         this.district = new DistrictModel()
+        this.constituency = new ConstituencyModel()
     }
 
     Read = async (req, res)=>{
@@ -30,6 +32,8 @@ module.exports = class HouseholdsController{
                 let District = await this.district.Read({District_Code: EPAs.District})
                 District = District[0]
 
+                let Constituencies = await this.constituency.Read({"DISTRICT": District.District_Name})
+
                 let TAs = await this.ta.Read({District:EPAs.District})
 
                 let villages = []
@@ -44,7 +48,8 @@ module.exports = class HouseholdsController{
                     "epa":EPAs,
                     "district":District,
                     "section": Section,
-                    "villages": villages
+                    "villages": villages,
+                    "constituency": Constituencies
                 }
 
                 res.json(organizationUnit)
