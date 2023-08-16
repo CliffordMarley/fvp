@@ -34,7 +34,7 @@ module.exports = class HouseholdsController{
 
                 console.log("Constituency query: " ,{"DISTRICT": District.District_Name.toUpperCase()})
 
-                let Constituencies = await this.constituency.Read({"DISTRICT": District.District_Name.toUpperCase()})
+                let Constituencies = await this.constituency.Read({DISTRICT:District.District_Name.toUpperCase().toString()})
 
                 console.log(Constituencies)
 
