@@ -1,6 +1,6 @@
 
 const HouseHoldModel = require('../models/household.model')
-const {validateHouseholdData, validateHouseholdKeys, Isset} = require('../helpers/validation.helpers')
+const {validateHouseholdData, validateHouseholdKeys, Isset, CastData} = require('../helpers/validation.helpers')
 const Event = require('../models/event.model')
 
 module.exports = class HouseholdsController{
@@ -64,13 +64,14 @@ module.exports = class HouseholdsController{
     updateHousehold = async (req, res)=>{
         try{
             const nationalId = req.params.nationalId
-            const farmerProfile = req.body
+            let farmerProfile = req.body
 
             
             if(!validateHouseholdKeys(farmerProfile) ){
                 res.status(400).json({message:"Some required fields are empty!"})
             }else{
                 
+                farmerProfile = CastData(farmerProfile)
                 await this.household.updateByNationalID(nationalId, farmerProfile)
                 res.status(200).json({
                     message:"Farmer profile updated successfuly!"

@@ -74,6 +74,14 @@ function validateHouseholdKeys(data) {
     
 }
 
+let CastData = data=>{
+    data.Fit_For_Work = Boolean(data.Fit_For_Work)
+    data.In_Fisheries_Farming = Boolean(data.In_Fisheries_Farming)
+    data.In_Livestock_Farming = Boolean(data.In_Livestock_Farming)
+    data.In_Poutry_Farming = Boolean(data.In_Poutry_Farming)
+
+    return data
+}
 
 
-module.exports = {Isset, isInList, validateHouseholdData, validateHouseholdKeys}
+module.exports = {Isset, isInList, validateHouseholdData, validateHouseholdKeys, CastData}
