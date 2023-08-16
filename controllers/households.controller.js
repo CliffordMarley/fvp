@@ -28,7 +28,7 @@ module.exports = class HouseholdsController{
             }else if(!Isset(District)){
                 res.status(400).json({messge:"Invalid/Empty district name!"})
             }else{
-                await this.household.initialize()
+                
                 const filter = {
                     Section, 
                     District
@@ -70,7 +70,7 @@ module.exports = class HouseholdsController{
             if(!validateHouseholdKeys(farmerProfile) ){
                 res.status(400).json({message:"Some required fields are empty!"})
             }else{
-                await this.household.initialize()
+                
                 await this.household.updateByNationalID(nationalId, farmerProfile)
                 res.status(200).json({
                     message:"Farmer profile updated successfuly!"

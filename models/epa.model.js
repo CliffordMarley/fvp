@@ -10,7 +10,7 @@ module.exports = class HouseholdModel {
     async initialize() {
         try {
             await this.dbConnection.connect();
-            this.collection = this.dbConnection.getCollection('section');
+            this.collection = this.dbConnection.getCollection('epa');
         } catch (err) {
             throw err;
         }

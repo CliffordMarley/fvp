@@ -4,12 +4,13 @@ module.exports = class HouseholdModel {
     constructor() {
         this.dbConnection = new MongoDBConnection('aip_validator');
         this.collection = null;
+        this.initialize()
     }
 
     async initialize() {
         try {
             await this.dbConnection.connect();
-            this.collection = this.dbConnection.getCollection('aedos');
+            this.collection = this.dbConnection.getCollection('aedo');
         } catch (err) {
             throw err;
         }
