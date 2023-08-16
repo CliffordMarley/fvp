@@ -24,7 +24,7 @@ module.exports = class HouseholdsController{
             if(sections && sections.length > 0){
                 let Section = sections[0]
                 console.log("Sections", Section)
-                let EPAs = await this.epa.Read({EPACode:this.section.EPA})
+                let EPAs = await this.epa.Read({EPACode:Section.EPA})
                 EPAs = EPAs[0]
                 console.log("EPAs",EPAs)
                 let District = await this.district.Read({District_Code: EPAs.District})
