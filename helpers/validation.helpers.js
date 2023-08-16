@@ -43,12 +43,9 @@ function validateHouseholdKeys(data) {
         "Purpose_Of_Production",
         "Section",
         "Sex",
-        "Support_Program",
-        "Support_Type",
         "TA",
         "Total_Arable_Land_Size",
         "Total_Arable_Land_Used",
-        "Updated",
         "Updated_By",
         "Village",
         "_id"
