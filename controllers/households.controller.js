@@ -19,8 +19,8 @@ module.exports = class HouseholdsController{
     readBySection = async (req, res)=>{
         try{
             console.log(req.username)
-            const Section = req.params.SectionName
-            const District = req.params.DistrictName
+            const Section = req.params.SectionName.toUpperCase()
+            const District = req.params.DistrictName.toUpperCase()
             
 
             if(!Isset(Section)){
