@@ -23,13 +23,12 @@ module.exports = class HouseholdsController{
             const sections = await this.section.Read(filter)
             if(sections && sections.length > 0){
                 let Section = sections[0]
-                console.log("Sections", Section)
+
                 let EPAs = await this.epa.Read({EPACode:Section.EPA})
                 EPAs = EPAs[0]
-                console.log("EPAs",EPAs)
+
                 let District = await this.district.Read({District_Code: EPAs.District})
                 District = District[0]
-                console.log("District",District)
 
                 let TAs = await this.ta.Read({District:EPAs.District})
 
@@ -54,7 +53,8 @@ module.exports = class HouseholdsController{
             }
         }catch(err){
             res.status(500).json({
-                message:err.message
+                message:err.message,
+                err
             })
         }
     }
