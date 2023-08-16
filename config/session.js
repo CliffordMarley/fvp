@@ -2,7 +2,6 @@ const {verifyJSONWebToken} = require('../helpers/auth.helper')
 
 const restAuth = (req, res, next)=>{
     try{
-        console.log(req.headers)
         if(!req.headers.authorization){
             res.status(401).json({message:"Unauthorized!"})
             return
