@@ -34,7 +34,7 @@ module.exports = class HouseholdsController{
 
                 let villages = []
 
-                for(ta of TAs){
+                for(const ta of TAs){
                     let villagesRead = await this.villages.Read({TACode:ta.TACode})
                     villages = villages.concat(villagesRead)
                 }
