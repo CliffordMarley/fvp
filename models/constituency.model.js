@@ -10,7 +10,7 @@ module.exports = class HouseholdModel {
     async initialize() {
         try {
             await this.dbConnection.connect();
-            this.collection = this.dbConnection.getCollection('Constituency');
+            this.collection = this.dbConnection.getCollection('constituency');
         } catch (err) {
             throw err;
         }
@@ -23,6 +23,8 @@ module.exports = class HouseholdModel {
             throw err;
         }
     }
+   
+
 
     async Read(filter = null) {
         try {

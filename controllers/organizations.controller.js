@@ -32,7 +32,9 @@ module.exports = class HouseholdsController{
                 let District = await this.district.Read({District_Code: EPAs.District})
                 District = District[0]
 
-                let constFilter = {DISTRICT:District.District_Name.toUpperCase().toString()}
+                let constFilter = {
+                    DISTRICT:District.District_Name.toUpperCase().toString()
+                }
                 console.log("Constituency query: " ,constFilter)
 
                 let Constituencies = await this.constituency.Read(constFilter)
