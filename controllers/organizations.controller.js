@@ -23,8 +23,12 @@ module.exports = class HouseholdsController{
             const sections = await this.section.Read(filter)
             if(sections && sections.length > 0){
                 let Section = sections[0]
+                console.log("Sections", Section)
                 let EPAs = await this.epa.Read({EPACode:this.section.EPA})[0]
+                console.log("EPAs",EPAs)
                 let District = await this.district.Read({District_Code: EPAs.District})[0]
+                console.log("District",District)
+
                 let TAs = await this.district.Read({District:EPAs.District})
 
                 let villages = []
