@@ -31,7 +31,7 @@ module.exports = class HouseholdsController{
                 District = District[0]
                 console.log("District",District)
 
-                let TAs = await this.district.Read({District:EPAs.District})
+                let TAs = await this.ta.Read({District:EPAs.District})
 
                 let villages = []
 
