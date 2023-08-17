@@ -34,11 +34,13 @@ module.exports = class HouseholdsController{
                 EPAs = EPAs[0]
 
                 let District = await this.district.Read({District_Code: EPAs.District})
-                console.log(District)
                 District = District[0]
-                let District_Name = District.District_Name.split('')
+
+                let District_Name = District.District_Name.split( '')
+                console.log("Array: ", District_Name)
                 District_Name= District_Name[0].toUpperCase()
-                console.log("Constitutency Search: ", {DISTRICT:District.District_Name})
+                console.log("District Name: ", District_Name)
+                console.log("Constitutency Search: ", {DISTRICT:District_Name})
                 let Constituencies = await this.constituency.Read({DISTRICT:District.District_Name.toUpperCase()})
 
                 console.log(Constituencies)
