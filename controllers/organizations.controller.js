@@ -54,6 +54,8 @@ module.exports = class HouseholdsController{
                     villages = villages.concat(villagesRead)
                 }
 
+                villages.sort()
+
                 const organizationUnit = {
                     "ta":TAs,
                     "epa":EPAs,
