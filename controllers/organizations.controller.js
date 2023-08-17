@@ -36,7 +36,7 @@ module.exports = class HouseholdsController{
                 let District = await this.district.Read({District_Code: EPAs.District})
                 District = District[0]
 
-                let District_Name = District.District_Name.split( '')
+                let District_Name = District.District_Name.split('')
                 console.log("Array: ", District_Name)
                 District_Name= District_Name[0].toUpperCase()
                 console.log("District Name: ", District_Name)
