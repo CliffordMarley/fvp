@@ -66,12 +66,14 @@ module.exports = class HouseholdsController{
             const nationalId = req.params.nationalId
             let farmerProfile = req.body
 
-            
+            farmerProfile = CastData(farmerProfile)
             if(!validateHouseholdKeys(farmerProfile) ){
                 res.status(400).json({message:"Some required fields are empty!"})
+            }else if(farmerProfile.In_Livestock_Farming == true && farmerProfile.Livestock_Type == ""){
+                res.status(400).json({message:"Please indicate the Livestock item for this household!"})
             }else{
                 
-                farmerProfile = CastData(farmerProfile)
+                
                 await this.household.updateByNationalID(nationalId, farmerProfile)
                 res.status(200).json({
                     message:"Farmer profile updated successfuly!"
