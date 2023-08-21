@@ -23,7 +23,6 @@ function validateHouseholdKeys(data) {
     const requiredKeys = [
         "ADD",
         "Constituency",
-        "Coordinates",
         "District",
         "EPA",
         "FO_Type",
@@ -33,7 +32,6 @@ function validateHouseholdKeys(data) {
         "Fit_For_Work",
         "In_Fisheries_Farming",
         "In_Livestock_Farming",
-        "In_Poutry_Farming",
         "Land_Ownership_Type",
         "Last_Season_Production",
         "Major_Enterprize",
