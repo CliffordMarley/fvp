@@ -77,7 +77,7 @@ module.exports = class HouseholdsController{
 
                 console.log(farmerProfile)
 
-                if(farmerProfile.In_Livestock_Farming == true &&  farmerProfile.Livestock_Type == ""){
+                if(farmerProfile.In_Livestock_Farming == true &&  !Isset(farmerProfile.Livestock_Type)){
                     res.status(400).json({message:"Please indicate the Livestock item for this household!"})
                 }else{
                     await this.household.updateByNationalID(nationalId, farmerProfile)
