@@ -1,5 +1,6 @@
 
 const HouseHoldModel = require('../models/household.model')
+const IdentityModel = require('../models/identity.model')
 const {validateHouseholdData, validateHouseholdKeys, Isset, CastData} = require('../helpers/validation.helpers')
 const Event = require('../models/event.model')
 
@@ -14,6 +15,7 @@ module.exports = class HouseholdsController{
             "Failed to update a household!"
         ]
         this.household = new HouseHoldModel()
+        this.identity = new IdentityModel()
     }
 
     readBySection = async (req, res)=>{
@@ -93,6 +95,23 @@ module.exports = class HouseholdsController{
         }
     }
 
+    InsertNewIdentity = async (req, res)=>{
+        try{
+            const document = req.body
+            if(document){
+                throw new Error('Invalid document!')
+            }
+            await this.identity.Create(document)
+            res.json({
+                message:"New identity inserted!"
+            })
+        }catch(err){
+            console.log(err)
+            res.status(500).json({
+                message:err.message
+            })
+        }
+    }
     
 
 }
