@@ -75,6 +75,8 @@ module.exports = class HouseholdsController{
                 
                 farmerProfile = CastData(farmerProfile)
 
+                console.log(farmerProfile)
+
                 if(farmerProfile.In_Livestock_Farming == true &&  farmerProfile.Livestock_Type == ""){
                     res.status(400).json({message:"Please indicate the Livestock item for this household!"})
                 }else{
