@@ -21,7 +21,6 @@ function validateHouseholdData(data) {
 
 function validateHouseholdKeys(data) {
     const requiredKeys = [
-        "ADD",
         "Constituency",
         "District",
         "EPA",
