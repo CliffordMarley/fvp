@@ -37,6 +37,13 @@ module.exports = class HouseholdsController{
                 }
                 console.log(filter)
                 const households = await this.household.Read(filter)
+                
+
+                //Now get all IDs from records withing this district but without Section
+                const householdsWithMissingSections = await this.household.Read({
+                    District,
+                    Section:null
+                })
 
                 const villages = []
                 for(let i = 0; i < households.length; i++){
@@ -49,6 +56,7 @@ module.exports = class HouseholdsController{
                     message:`${households.length} farmer records found!`,
                     data:{
                         households,
+                        householdsWithMissingSections,
                         villages
                     }
                 })
