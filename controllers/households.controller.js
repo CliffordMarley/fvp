@@ -44,7 +44,7 @@ module.exports = class HouseholdsController{
                     District,
                     Section:null
                 })
-              //  households = households.concat(householdsWithMissingSections)
+                households = households.concat(householdsWithMissingSections)
 
                 const villages = []
                 for(let i = 0; i < households.length; i++){
