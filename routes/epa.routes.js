@@ -7,5 +7,7 @@ module.exports = router=>{
 
     router.get('/section/epa/:EPA', epaController.ReadSection)
 
+    router.post('/aedo', epaController.NewOfficer)
+
     return router
 }
