@@ -1,6 +1,6 @@
 const MongoDBConnection = require("../config/dbconn.config");
 
-module.exports = class HouseholdModel {
+module.exports = class {
     constructor() {
         this.dbConnection = new MongoDBConnection('aip_validator');
         this.collection = null;
@@ -36,6 +36,17 @@ module.exports = class HouseholdModel {
         }
     }
 
+    async ReadAll() {
+        try {
+            if (!this.collection) {
+                throw new Error('Collection not initialized. Call initialize() before using the model.');
+            }
+            const documents = await this.collection.find().toArray();
+            return documents;
+        } catch (err) {
+            throw err;
+        }
+    }
 
     
 }

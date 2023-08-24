@@ -1,0 +1,140 @@
+<div class="row">
+    <div class="col-12 text-center display-4 mt-4">
+        <h1 class="text-danger">FARMING HOUSEHOLD VALIDATION</h1>
+    </div>
+    
+
+    <div class="col-12">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">New AEDO</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">AEDO Transfers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Training Households</a>
+        </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <form >
+                <div class="form-row">
+                    <div class="col-3">
+                        <label for="">District</label>
+                        <select name="District" id="District" class="form-control" required>
+                            <option value="">SELECT OPTION</option>
+                            {{#each districts}}
+                                <option value="{{this.District_Code}}">{{this.District_Name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label for="">EPA</label>
+                        <select name="EPA" id="EPA" class="form-control" required>
+                            
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label for="">Section</label>
+                        <select name="Section" id="Section" class="form-control" required>
+                            <option value="">SELECT OPTION</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-2">
+                        <label for="">First Name</label>
+                        <input type="text" onkeyup="this.value = this.value.toUpperCase()" name="FirstName" placeholder="e.g John" class="form-control" required>
+                    </div>
+                    <div class="col-2">
+                        <label for="">Last Name</label>
+                        <input type="text" onkeyup="this.value = this.value.toUpperCase()" name="LastName" placeholder="e.g Banda" class="form-control" required>
+                    </div>
+                    <div class="col-4">
+                        <label for="">Phone Number</label>
+                        <input type="number" name="Phone_Number" placeholder="Do not include zero" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-10"><hr></div>
+                     <div class="col-10 text-right">
+                        <label for=""></label>
+                        <button class="btn btn-success">Submit</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+        </div>
+        </div>
+    </div>
+    <hr>
+
+
+</div>
+
+<script>
+    let epaList = [], sectionList = []
+    $(()=>{
+        $('#District').change(function(e){
+            const District = this.value
+            fetchEPAList(District)
+        })
+        $('#EPA').change(function(e){
+            const EPA = this.value
+            fetchSectionList(EPA)
+        })
+    })
+
+    let fetchEPAList = async (District_Code)=>{
+        console.log("Fetching EPAs...")
+
+        try{
+            let response = await fetch(BaseURL+"/epa/district/"+District_Code)
+            if(response.ok){
+                epaList = await response.json()
+                renderEPAs()
+            }
+        }catch(err){
+            console.log(err)
+        }
+    }
+    let fetchSectionList = async (EPA)=>{
+        console.log("Fetching EPAs...")
+
+        try{
+            let response = await fetch(BaseURL+"/section/epa/"+EPA)
+            if(response.ok){
+                sectionList = await response.json()
+                renderSections()
+            }
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    let renderEPAs = ()=>{
+        let DOM = epaList.map(epa=>{
+            return `<option value='${epa.EPACode}'>${epa.EPA_Name}</option>`
+        }).join('')
+
+        DOM = `<option value="">SELECT OPTION</option>${DOM}`
+
+        $("#EPA").html(DOM)
+    }
+    let renderSections = ()=>{
+        let DOM = sectionList.map(section=>{
+            return `<option value='${section.Section_Code}'>${section.Section_Name}</option>`
+        }).join('')
+
+        DOM = `<option value="">SELECT OPTION</option>${DOM}`
+
+        $("#Section").html(DOM)
+    }
+</script>

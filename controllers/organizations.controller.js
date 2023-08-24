@@ -7,7 +7,7 @@ const ConstituencyModel = require("../models/constituency.model")
 
 const Event = require('../models/event.model')
 
-module.exports = class HouseholdsController{
+module.exports = class {
 
     constructor(){
         this.event = new Event()
