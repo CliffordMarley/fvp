@@ -30,7 +30,7 @@ module.exports = class Auth{
                 const access_token = signJSONWebToken(User)
                 delete User.Password
                 delete User._id
-    
+                console.log("Login successful!", User)
                 res.status(201).json({
                   access_token,
                   data:User
