@@ -121,7 +121,7 @@ module.exports = class HouseholdsController{
     InsertNewIdentity = async (req, res)=>{
         try{
             const document = req.body
-            if(document){
+            if(!document){
                 throw new Error('Invalid document!')
             }
             await this.identity.Create(document)
