@@ -71,7 +71,7 @@ module.exports = class HouseholdsController{
                         villages
                     }
                 }
-                res.setHeader('Content-Length', Buffer.byteLength(responseJson))
+                res.setHeader('Content-Length', Buffer.byteLength(JSON.stringify(responseJson)))
                 res.json(responseJson)
                 this.event.Log(req.username, this.actions[0])
             }            
