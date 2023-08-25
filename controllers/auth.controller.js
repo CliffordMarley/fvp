@@ -5,7 +5,7 @@ module.exports = class Auth{
     constructor(){
         this.user = new UserModel()
         this.event = new Event()
-        this.actionss = [
+        this.actions = [
             "Successfully logged in",
             "Failed to log in",
         ]
@@ -35,16 +35,16 @@ module.exports = class Auth{
                   access_token,
                   data:User
                 })
-                this.event.Log(Username, this.actionss[0])
+                this.event.Log(User.Phone_Number, this.actions[0])
             }else{
                 res.status(401).json({message:"Invalid phone number or password!"})
-                this.event.Log(Username, this.actionss[1])
+                this.event.Log(Username, this.actions[1])
                 return
             }
 
         }catch(err){
             console.log(err)
-            this.event.Log(Username, this.actionss[1], err)
+            this.event.Log(Username, this.actions[1], err)
             res.status(500).json({
                 message:err.message
             })
