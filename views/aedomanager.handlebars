@@ -18,7 +18,7 @@
         </ul>
         <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <form id="newAEDOForm">
+            <form class="ui form" id="newAEDOForm">
                 <div class="form-row">
                     <div class="col-3">
                         <label for="">District</label>
@@ -162,6 +162,11 @@
             }
 
             let response = await fetch(BaseURL+"/aedo", options)
+            let feedback = await response.json()
+            if(!response.ok){
+                throw new Error(feedback.message)
+            }
+            alert(feedback.message)
         }catch(err){
             alert(err.message)
         }finally{

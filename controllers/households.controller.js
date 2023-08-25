@@ -44,6 +44,11 @@ module.exports = class HouseholdsController{
                     District,
                     Section:null
                 })
+                for(let i = 0; householdsWithMissingSections.length; i++){
+                    if(!Isset(householdsWithMissingSections[i].Village)){
+                        householdsWithMissingSections[i].Village = "UNKNOWN"
+                    }
+                }
                 households = households.concat(householdsWithMissingSections)
 
                 const villages = []
