@@ -48,13 +48,13 @@ module.exports = class HouseholdsController{
                 households = households.concat(householdsWithMissingSections)
 
                 try{
-                    for(let i = 0; households.length; i++){
+                    for(let i = 0; i < households.length; i++){
                         if(!Isset(households[i].Village)){
                             households[i].Village = "UNKNOWN"
                         }
                     }
                 }catch(err){
-                    console.log(err)
+                    console.log(err.message)
                 }
 
                 const villages = []
