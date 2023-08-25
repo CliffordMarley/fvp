@@ -64,13 +64,15 @@ module.exports = class HouseholdsController{
                     }
                 }
                 villages.sort()
-                res.json({
+                const responseJson = {
                     message:`${households.length} farmer records found!`,
                     data:{
                         households,
                         villages
                     }
-                })
+                }
+                res.setHeader('Content-Length', Buffer.byteLength(responseJson))
+                res.json(responseJson)
                 this.event.Log(req.username, this.actions[0])
             }            
         }catch(err){
