@@ -22,13 +22,15 @@ module.exports = class {
 
     Read = async (req, res)=>{
         try{
+            console.log("Reading organizational structure...")
             const filter = req.params
-            console.log(filter)
             
             //Find section
             const sections = await this.section.Read(filter)
             if(sections && sections.length > 0){
                 let Section = sections[0]
+
+                let otherSections = await this.section.Read({EPA: Section.EPA})
 
                 let EPAs = await this.epa.Read({EPACode:Section.EPA})
                 EPAs = EPAs[0]
@@ -40,8 +42,6 @@ module.exports = class {
              
                 District_Name= District_Name[0].toUpperCase()
                 let Constituencies = await this.constituency.Read({DISTRICT:District_Name})
-
-                console.log(Constituencies)
 
                 let TAs = await this.ta.Read({District:EPAs.District})
 
@@ -59,6 +59,7 @@ module.exports = class {
                     "epa":EPAs,
                     "district":District,
                     "section": Section,
+                    "otherSections": otherSections,
                     "villages": villages,
                     "constituency": Constituencies
                 }
