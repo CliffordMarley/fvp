@@ -124,6 +124,8 @@ module.exports = class HouseholdsController{
             if(!document){
                 throw new Error('Invalid document!')
             }
+            
+            document.AEDO = req.username
             await this.identity.Create(document)
             res.json({
                 message:"New identity inserted!"
