@@ -15,7 +15,6 @@ module.exports = class Auth{
         try{
             console.log('Authenticating...')
             const {Username, Password} = req.body
-            console.table({Username, Password})
 
             if(!Username || !Password){
                 res.status(401).json({message:"Invalid phone number or password!"})

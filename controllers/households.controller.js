@@ -20,7 +20,7 @@ module.exports = class HouseholdsController{
 
     readBySection = async (req, res)=>{
         try{
-            console.log(req.username)
+            console.log("Reading households by section...")
             const Section = req.params.SectionName.toUpperCase()
             const District = req.params.DistrictName.toUpperCase()
             
@@ -35,7 +35,6 @@ module.exports = class HouseholdsController{
                     Section, 
                     District
                 }
-                console.log(filter)
                 let households = await this.household.Read(filter)
                 
 
@@ -89,14 +88,12 @@ module.exports = class HouseholdsController{
             const nationalId = req.params.nationalId
             let farmerProfile = req.body
 
-            console.log("Submitted data: ",farmerProfile)
+            console.log("Updating households...")
             if(!validateHouseholdKeys(farmerProfile) ){
                 res.status(400).json({message:"Some required fields are empty!"})
             }else{
                 
                 farmerProfile = CastData(farmerProfile)
-
-                console.log(farmerProfile)
 
                 if(farmerProfile.In_Livestock_Farming == true &&  !Isset(farmerProfile.Livestock_Type)){
                     res.status(400).json({message:"Please indicate the Livestock item for this household!"})
@@ -120,6 +117,7 @@ module.exports = class HouseholdsController{
 
     InsertNewIdentity = async (req, res)=>{
         try{
+            console.log("Inserting a new identity...")
             const document = req.body
             if(!document){
                 throw new Error('Invalid document!')
