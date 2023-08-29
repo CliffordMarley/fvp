@@ -95,15 +95,11 @@ module.exports = class HouseholdsController{
                 
                 farmerProfile = CastData(farmerProfile)
 
-                if(farmerProfile.In_Livestock_Farming == true &&  !Isset(farmerProfile.Livestock_Type)){
-                    res.status(400).json({message:"Please indicate the Livestock item for this household!"})
-                }else{
-                    await this.household.updateByNationalID(nationalId, farmerProfile)
-                    res.status(200).json({
-                        message:"Farmer profile updated successfuly!"
-                    })
-                    this.event.Log(req.username, this.actions[2])
-                }
+                await this.household.updateByNationalID(nationalId, farmerProfile)
+                res.status(200).json({
+                    message:"Farmer profile updated successfuly!"
+                })
+                this.event.Log(req.username, this.actions[2])
                 
             }            
         }catch(err){
