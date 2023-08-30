@@ -50,7 +50,7 @@ function validateHouseholdKeys(data) {
 
     const missingKeys = requiredKeys.filter(key => {
         const keyMissing = !Object.prototype.hasOwnProperty.call(data, key);
-        const valueIsNullUndefined = data[key] === null || data[key] === undefined;
+        const valueIsNullUndefined = data[key] === null || data[key] === undefined || data[key] == "";
         const booleanValueIsNotFalse = typeof data[key] === 'boolean' && data[key] !== false;
     
         if (keyMissing || valueIsNullUndefined || booleanValueIsNotFalse) {
