@@ -128,7 +128,13 @@ module.exports = class HouseholdsController{
             }
             
             document.AEDO = req.username
-            await this.identity.Create(document)
+
+            const filter = {National_ID: document.National_ID}
+            let checkExists = await this.identity.Read(filter)
+            
+            if(checkExists.length == 0){
+                await this.identity.Create(document)
+            }
             res.json({
                 message:"New identity inserted!"
             })
