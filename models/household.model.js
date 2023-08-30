@@ -29,10 +29,19 @@ module.exports = class HouseholdModel {
             if (!this.collection) {
                 throw new Error('Collection not initialized. Call initialize() before using the model.');
             }
-
-            // The 'filter' parameter can be used to pass query criteria to MongoDB
-            // For example, if filter = { city: 'New York' }, it will fetch households in New York
             const documents = await this.collection.find(filter).toArray();
+            return documents;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async ReadWithPagination (filter = null, offset, limit) {
+        try {
+            if (!this.collection) {
+                throw new Error('Collection not initialized. Call initialize() before using the model.');
+            }
+            const documents = await this.collection.find(filter).skip(offset).limit(limit).toArray();
             return documents;
         } catch (err) {
             throw err;

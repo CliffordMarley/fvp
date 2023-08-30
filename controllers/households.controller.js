@@ -23,7 +23,6 @@ module.exports = class HouseholdsController{
             console.log("Reading households by section...")
             const Section = req.params.SectionName.toUpperCase()
             const District = req.params.DistrictName.toUpperCase()
-            
 
             if(!Isset(Section)){
                 res.status(400).json({messge:"Invalid/Empty section name!"})
@@ -31,30 +30,11 @@ module.exports = class HouseholdsController{
                 res.status(400).json({messge:"Invalid/Empty district name!"})
             }else{
                 
-                const filter = {
-                    Section, 
-                    District
-                }
+                const filter = {Section, District}
                 let households = await this.household.Read(filter)
-                
 
-                //Now get all IDs from records withing this district but without Section
-                const householdsWithMissingSections = await this.household.Read({
-                    District,
-                    Section:null
-                })
-               
-                households = households.concat(householdsWithMissingSections)
-
-                try{
-                    for(let i = 0; i < households.length; i++){
-                        if(!Isset(households[i].Village)){
-                            households[i].Village = "UNKNOWN"
-                        }
-                    }
-                }catch(err){
-                    console.log(err.message)
-                }
+                const otherHouseholdsFilter = {District,Section:null}
+                const householdsWithMissingSections = await this.household.Read(otherHouseholdsFilter)
 
                 const villages = []
                 for(let i = 0; i < households.length; i++){
@@ -67,7 +47,8 @@ module.exports = class HouseholdsController{
                     message:`${households.length} farmer records found!`,
                     data:{
                         households,
-                        villages
+                        villages,
+                        unassignedHouseholdsCount: householdsWithMissingSections.length
                     }
                 }
                 res.setHeader('Content-Length', Buffer.byteLength(JSON.stringify(responseJson)))
@@ -77,6 +58,25 @@ module.exports = class HouseholdsController{
         }catch(err){
             console.log(err)
             this.event.Log(req.username, this.actions[1], err)
+            res.status(500).json({
+                message:err.message
+            })
+        }
+    }
+
+    readByEmptySection = async (req, res)=>{
+        try{
+            console.log("Loading households with empty sections...")
+
+            const offset = req.query.offset
+            const limit  = req.query.limit
+            const District = req.parama.DistrictName
+
+            const filter = {District,Section:null}
+            const householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
+
+            res.json(householdsWithMissingSections)
+        }catch(err){
             res.status(500).json({
                 message:err.message
             })
