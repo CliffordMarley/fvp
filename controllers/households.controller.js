@@ -73,12 +73,13 @@ module.exports = class HouseholdsController{
             const District = req.params.DistrictName.toUpperCase()
 
             const filter = {
-                $or:[
-                    {Section:null},
-                    {Section:""}
+                $or: [
+                  { Section: null },
+                  { Section: "" }
                 ],
                 District
-            }
+              }
+              
             const householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
 
             res.json(householdsWithMissingSections)
