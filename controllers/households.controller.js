@@ -89,7 +89,7 @@ module.exports = class HouseholdsController{
             const nationalId = req.params.nationalId
             let farmerProfile = req.body
 
-            console.log("Updating households...")
+            console.log("Updating household...")
             if(!validateHouseholdKeys(farmerProfile) ){
                 res.status(400).json({message:"Some required fields are empty!"})
             }else{

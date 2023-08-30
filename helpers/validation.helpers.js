@@ -54,7 +54,7 @@ function validateHouseholdKeys(data) {
         const booleanValueIsNotFalse = typeof data[key] === 'boolean' && data[key] !== false;
     
         if (keyMissing || valueIsNullUndefined || booleanValueIsNotFalse) {
-            console.log(`Missing or invalid key: ${key}`);
+          //  console.log(`Missing or invalid key: ${key}`);
         }
     
         // Return true if any of the conditions are met
