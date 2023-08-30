@@ -68,8 +68,8 @@ module.exports = class HouseholdsController{
         try{
             console.log("Loading households with empty sections...")
 
-            const offset = req.query.offset
-            const limit  = req.query.limit
+            const offset = parseInt(req.query.offset)
+            const limit  = parseInt(req.query.limit)
             const District = req.params.DistrictName.toUpperCase()
 
             const filter = {District,Section:null}
