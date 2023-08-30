@@ -70,13 +70,14 @@ module.exports = class HouseholdsController{
 
             const offset = req.query.offset
             const limit  = req.query.limit
-            const District = req.parama.DistrictName
+            const District = req.params.DistrictName.toUpperCase()
 
             const filter = {District,Section:null}
             const householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
 
             res.json(householdsWithMissingSections)
         }catch(err){
+            console.log(err)
             res.status(500).json({
                 message:err.message
             })
