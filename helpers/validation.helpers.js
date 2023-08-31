@@ -77,7 +77,37 @@ let CastData = data=>{
     data.In_Livestock_Farming = Boolean(data.In_Livestock_Farming)
     data.In_Poutry_Farming = Boolean(data.In_Poutry_Farming)
 
+    data = capitalizeNonEmptyStrings(data)
+
     return data
+}
+
+let isNonEmptyNonNumericString = (value)=>{
+    return typeof value === 'string' && value.trim() !== '' && isNaN(value);
+}
+
+let capitalizeNonEmptyStrings = (obj)=>{
+    try{
+        if (typeof obj === 'object') {
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (isNonEmptyNonNumericString(obj[key])) {
+                        obj[key] = obj[key].toUpperCase();
+                    } else if (typeof obj[key] === 'object') {
+                        capitalizeNonEmptyStrings(obj[key]);
+                    }
+                }
+            }
+        } else if (Array.isArray(obj)) {
+            for (let i = 0; i < obj.length; i++) {
+                if (typeof obj[i] === 'object') {
+                    capitalizeNonEmptyStrings(obj[i]);
+                }
+            }
+        }
+    }catch(err){
+        return obj
+    }
 }
 
 
