@@ -6,10 +6,12 @@ const restAuth = (req, res, next)=>{
             res.status(401).json({message:"Unauthorized!"})
             return
         }
+        let decoded = false
         const token = req.headers.authorization.split(' ')[1]
-        const decoded = verifyJSONWebToken(token)
-        req.username =decoded.data.Phone_Number
-
+        if(token){
+            decoded = verifyJSONWebToken(token)
+            req.username =decoded.data.Phone_Number    
+        }
 
         if(!decoded){
             res.status(401).json({message:"Unauthorized!"})
