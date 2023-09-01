@@ -83,6 +83,8 @@ module.exports = class HouseholdsController{
                 console.log("Benchmarking test syncronization for large data set!")
                 filter = {District}
             }
+
+            console.log(filter)
             
             const householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
 
