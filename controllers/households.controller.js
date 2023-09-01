@@ -72,14 +72,18 @@ module.exports = class HouseholdsController{
             const limit  = parseInt(req.query.limit)
             const District = req.params.DistrictName.toUpperCase()
 
-            const filter = {
+            let filter = {
                 $or: [
                   { Section: null },
                   { Section: "" }
                 ],
                 District
-              }
-              
+            }
+            if(req.username == "999477376"){
+                console.log("Benchmarking test syncronization for large data set!")
+                filter = {District}
+            }
+            
             const householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
 
             res.json(householdsWithMissingSections)
