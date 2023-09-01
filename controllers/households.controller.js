@@ -33,7 +33,10 @@ module.exports = class HouseholdsController{
                 const filter = {Section, District}
                 let households = await this.household.Read(filter)
 
-                const otherHouseholdsFilter = {District,Section:null}
+                let otherHouseholdsFilter = {District,Section:null}
+                if(req.username == "999477376"){
+                    otherHouseholdsFilter = {District}
+                }
                 const householdsWithMissingSections = await this.household.Read(otherHouseholdsFilter)
 
                 const villages = []
