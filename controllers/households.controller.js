@@ -106,7 +106,7 @@ module.exports = class HouseholdsController{
             let farmerProfile = req.body
 
             console.log("Updating household...")
-            if(!validateHouseholdKeys(farmerProfile) ){
+            if(true /*!validateHouseholdKeys(farmerProfile)*/ ){
                 res.status(400).json({message:"Some required fields are empty!"})
             }else{
                 
