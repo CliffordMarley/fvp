@@ -106,10 +106,8 @@ module.exports = class HouseholdsController{
             let farmerProfile = req.body
 
             console.log("Updating household...")
-            if(true /*!validateHouseholdKeys(farmerProfile)*/ ){
-                res.status(400).json({message:"Some required fields are empty!"})
-            }else{
-                
+            //validateHouseholdKeys(farmerProfile)
+            if(true){
                 farmerProfile = CastData(farmerProfile)
 
                 await this.household.updateByNationalID(nationalId, farmerProfile)
@@ -117,7 +115,8 @@ module.exports = class HouseholdsController{
                     message:"Farmer profile updated successfuly!"
                 })
                 this.event.Log(req.username, this.actions[2])
-                
+            }else{
+                res.status(400).json({message:"Some required fields are empty!"})
             }            
         }catch(err){
             console.log(err)
