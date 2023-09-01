@@ -110,7 +110,7 @@ module.exports = class HouseholdsController{
             if(true){
                 farmerProfile = CastData(farmerProfile)
 
-                await this.household.updateByNationalID(nationalId, farmerProfile)
+                await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 res.status(200).json({
                     message:"Farmer profile updated successfuly!"
                 })
