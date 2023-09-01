@@ -109,7 +109,7 @@ module.exports = class HouseholdsController{
             //validateHouseholdKeys(farmerProfile)
             if(true){
                 farmerProfile = CastData(farmerProfile)
-
+                console.log(farmerProfile)
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 res.status(200).json({
                     message:"Farmer profile updated successfuly!"

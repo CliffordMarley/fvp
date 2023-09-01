@@ -106,6 +106,8 @@ let capitalizeNonEmptyStrings = (obj)=>{
             }
         }
     }catch(err){
+        
+    }finally{
         return obj
     }
 }
