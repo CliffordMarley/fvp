@@ -86,9 +86,6 @@ module.exports = class HouseholdsController{
                 console.log("Benchmarking test syncronization for large data set!")
                 filter = {District}
             }
-
-            console.log(filter)
-            
             const householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
 
             res.json(householdsWithMissingSections)
@@ -105,11 +102,10 @@ module.exports = class HouseholdsController{
             const nationalId = req.params.nationalId
             let farmerProfile = req.body
 
-            console.log("Updating household...")
+            console.log("Updating household for Farmer %s", nationalId)
             //validateHouseholdKeys(farmerProfile)
             if(true){
                 farmerProfile = CastData(farmerProfile)
-                console.log(farmerProfile)
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 res.status(200).json({
                     message:"Farmer profile updated successfuly!"
