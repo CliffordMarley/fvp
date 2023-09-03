@@ -34,7 +34,7 @@ module.exports = class HouseholdsController{
                 let households = await this.household.Read(filter)
 
                 let otherHouseholdsFilter = {District,Section:null}
-                if(req.username == "999477376"){
+                if(req.username == "994791131"){
                     otherHouseholdsFilter = {District}
                 }
                 const householdsWithMissingSections = await this.household.Read(otherHouseholdsFilter)
