@@ -10,7 +10,7 @@ module.exports = class SectionModel {
     async initialize() {
         try {
             await this.dbConnection.connect();
-            this.collection = this.dbConnection.getCollection('postLog');
+            this.collection = this.dbConnection.getCollection('post_logger');
         } catch (err) {
             throw err;
         }
@@ -24,7 +24,7 @@ module.exports = class SectionModel {
         }
     }
 
-    async InsertLog(data) {
+    async Insert(data) {
         try {
             if (!this.collection) {
                 throw new Error('Collection not initialized. Call initialize() before using the model.');
@@ -32,6 +32,7 @@ module.exports = class SectionModel {
             await this.collection.insertOne(data)
             return true;
         } catch (err) {
+            console.log(err.message)
             throw err;
         }
     }
