@@ -105,7 +105,9 @@ module.exports = class HouseholdsController{
             const nationalId = req.params.nationalId
             let farmerProfile = req.body
             try{
-                await this.logger.Insert(req.body)
+                let requestBody = req.body
+                delete requestBody._id
+                await this.logger.Insert(requestBody)
             }catch(err){
                 console.log("Failed to log post request: ", err.message)
             }
