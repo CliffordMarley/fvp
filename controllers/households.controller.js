@@ -1,8 +1,10 @@
 
 const HouseHoldModel = require('../models/household.model')
 const IdentityModel = require('../models/identity.model')
-const {validateHouseholdData, validateHouseholdKeys, Isset, CastData} = require('../helpers/validation.helpers')
 const Event = require('../models/event.model')
+const LoggerModel = require('../models/log')
+
+const {validateHouseholdData, validateHouseholdKeys, Isset, CastData} = require('../helpers/validation.helpers')
 
 module.exports = class HouseholdsController{
 
@@ -16,6 +18,7 @@ module.exports = class HouseholdsController{
         ]
         this.household = new HouseHoldModel()
         this.identity = new IdentityModel()
+        this.logger = new LoggerModel()
     }
 
     readBySection = async (req, res)=>{
@@ -101,7 +104,11 @@ module.exports = class HouseholdsController{
         try{
             const nationalId = req.params.nationalId
             let farmerProfile = req.body
-
+            try{
+                await this.logger.InsertLog(req.body)
+            }catch(err){
+                console.log("Failed to log post request!")
+            }
             console.log("Updating household for Farmer %s", nationalId)
             //validateHouseholdKeys(farmerProfile)
             if(true){
