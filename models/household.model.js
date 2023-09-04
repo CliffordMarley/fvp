@@ -2,7 +2,7 @@ const MongoDBConnection = require("../config/dbconn.config");
 
 module.exports = class HouseholdModel {
     constructor() {
-        this.dbConnection = MongoDBConnection
+        this.dbConnection = new MongoDBConnection()
         this.collection = null;
         this.initialize()
     }
