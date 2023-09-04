@@ -24,7 +24,6 @@ module.exports = class Auth{
             }
             const Phone_Number = parseInt(Username)
 
-            await this.user.initialize()
             const User = await this.user.ReadOne({Phone_Number, Password})
 
             if(User){
