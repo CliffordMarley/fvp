@@ -26,7 +26,7 @@ app.get('/status', (req, res)=>{
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         console.log("Error in Body: ", req.body)
-        return res.status(400).json({ error: 'Invalid JSON' });
+        return res.status(400).json({ message: 'Invalid JSON body!' });
     }
     next(err);
 })
