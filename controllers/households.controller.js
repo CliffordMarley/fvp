@@ -115,8 +115,8 @@ module.exports = class HouseholdsController{
                 console.log("%s : Failed to log post request: %s",moment().utc().format(), err.message)
             }
             console.log("%s : Updating household for Farmer %s",moment().utc().format(), nationalId)
-            //validateHouseholdKeys(farmerProfile)
-            if(true){
+            //
+            if(validateHouseholdKeys(farmerProfile)){
                 farmerProfile = CastData(farmerProfile)
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 res.status(200).json({
