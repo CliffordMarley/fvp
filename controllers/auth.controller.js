@@ -1,6 +1,8 @@
 const UserModel = require('../models/user.model')
 const Event = require('../models/event.model')
 const {signJSONWebToken} = require('../helpers/auth.helper')
+const moment = require('moment') 
+
 module.exports = class Auth{
     constructor(){
         this.user = new UserModel()
@@ -13,7 +15,7 @@ module.exports = class Auth{
 
     Authenticate = async (req, res)=>{
         try{
-            console.log('Authenticating...')
+            console.log('%s : Authenticating user ...', moment().utc().format())
             const {Username, Password} = req.body
 
             if(!Username || !Password){

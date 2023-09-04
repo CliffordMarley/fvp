@@ -4,6 +4,7 @@ const EPAModel = require('../models/epa.model')
 const VillageModel = require("../models/village.model")
 const DistrictModel = require("../models/district.model")
 const ConstituencyModel = require("../models/constituency.model")
+const moment = require('moment')
 
 const Event = require('../models/event.model')
 
@@ -22,7 +23,7 @@ module.exports = class {
 
     Read = async (req, res)=>{
         try{
-            console.log("Reading organizational structure...")
+            console.log("%s : Reading organizational structure...", moment().utc().format())
             const filter = req.params
             
             //Find section

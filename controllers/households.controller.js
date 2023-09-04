@@ -4,6 +4,8 @@ const IdentityModel = require('../models/identity.model')
 const Event = require('../models/event.model')
 const LoggerModel = require('../models/log.model')
 
+const moment = require('moment')
+
 const {validateHouseholdData, validateHouseholdKeys, Isset, CastData} = require('../helpers/validation.helpers')
 
 module.exports = class HouseholdsController{
@@ -23,7 +25,8 @@ module.exports = class HouseholdsController{
 
     readBySection = async (req, res)=>{
         try{
-            console.log("Reading households by section...")
+            
+            console.log("%s : Reading households by section...", moment().utc().format())
             const Section = req.params.SectionName.toUpperCase()
             const District = req.params.DistrictName.toUpperCase()
 
@@ -72,7 +75,7 @@ module.exports = class HouseholdsController{
 
     readByEmptySection = async (req, res)=>{
         try{
-            console.log("Loading households with empty sections...")
+            console.log("%s : Loading households with empty sections...", moment().utc().format())
 
             const offset = parseInt(req.query.offset)
             const limit  = parseInt(req.query.limit)
@@ -109,9 +112,9 @@ module.exports = class HouseholdsController{
                 delete requestBody._id
                 await this.logger.Insert(requestBody)
             }catch(err){
-                console.log("Failed to log post request: ", err.message)
+                console.log("%s : Failed to log post request: %s",moment().utc().format(), err.message)
             }
-            console.log("Updating household for Farmer %s", nationalId)
+            console.log("%s : Updating household for Farmer %s",moment().utc().format(), nationalId)
             //validateHouseholdKeys(farmerProfile)
             if(true){
                 farmerProfile = CastData(farmerProfile)
@@ -134,7 +137,7 @@ module.exports = class HouseholdsController{
 
     InsertNewIdentity = async (req, res)=>{
         try{
-            console.log("Inserting a new identity...")
+            console.log("%s : Inserting a new identity...", moment().utc().format())
             const document = req.body
             if(!document){
                 throw new Error('Invalid document!')
