@@ -9,7 +9,7 @@ module.exports = (router)=>{
     router.get('/households/district/:DistrictName', restAuth, householdsContoller.readByEmptySection)
     
     router.put('/households/:nationalId',restAuth, householdsContoller.updateHousehold)
-
+    router.post('/households/batchInsert',restAuth, householdsContoller.batchUpload)
     router.post('/identities',restAuth, householdsContoller.InsertNewIdentity)
 
     return router

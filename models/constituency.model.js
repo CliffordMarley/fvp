@@ -1,68 +1,51 @@
-const MongoDBConnection = require("../config/dbconn.config");
+const { MongoClient } = require('mongodb');
 
-module.exports = class HouseholdModel {
-    constructor() {
-        this.dbConnection = new MongoDBConnection('aip_validator');
-        this.collection = null;
-        this.initialize()
+class MongoDBConnection {
+  constructor(dbName) {
+    if (!MongoDBConnection.instance) {
+      this.dbName = dbName;
+      this.url = 'mongodb://aip_validator:Angelsdie1997@aip-validator.agriculture.gov.mw:27017/?authMechanism=DEFAULT';
+      this.client = null;
+      this.db = null;
+      MongoDBConnection.instance = this;
+      this.connect(); // Automatically connect when the first instance is created
     }
+    return MongoDBConnection.instance;
+  }
 
-    async initialize() {
-        try {
-            await this.dbConnection.connect();
-            this.collection = this.dbConnection.getCollection('constituency');
-        } catch (err) {
-            throw err;
-        }
+  async connect() {
+    try {
+      this.client = await MongoClient.connect(this.url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      this.db = this.client.db(this.dbName);
+      console.log('Connected to MongoDB successfully.');
+    } catch (err) {
+      console.error('Error connecting to MongoDB:', err);
     }
+  }
 
-    async close() {
-        try {
-            await this.dbConnection.close();
-        } catch (err) {
-            throw err;
-        }
+  async close() {
+    try {
+      await this.client.close();
+      console.log('Connection to MongoDB closed.');
+    } catch (err) {
+      console.error('Error closing MongoDB connection:', err);
     }
-   
+  }
 
+  getCollection(collectionName) {
+    return this.db.collection(collectionName);
+  }
 
-    async Read(filter = null) {
-        try {
-            if (!this.collection) {
-                throw new Error('Collection not initialized. Call initialize() before using the model.');
-            }
-
-            // The 'filter' parameter can be used to pass query criteria to MongoDB
-            // For example, if filter = { city: 'New York' }, it will fetch households in New York
-            const documents = await this.collection.find(filter).toArray();
-            return documents;
-        } catch (err) {
-            throw err;
-        }
+  static getInstance(dbName) {
+    if (!MongoDBConnection.instance) {
+      console.log('Creating a new instance via getInstance');
+      MongoDBConnection.instance = new MongoDBConnection(dbName);
     }
-
-
-    async updateByNationalID(National_ID, data) {
-        try {
-            if (!this.collection) {
-                throw new Error('Collection not initialized. Call initialize() before using the model.');
-            }
-    
-            const filter = { National_ID };
-            
-            // Exclude _id from the update data
-            const updateData = { $set: { ...data } };
-            delete updateData.$set._id; // Make sure _id is not included
-    
-            const options = { returnOriginal: false };
-    
-            const result = await this.collection.findOneAndUpdate(filter, updateData, options);
-            return result.value;
-        } catch (err) {
-            throw err;
-        }
-    }
-    
-
-
+    return MongoDBConnection.instance;
+  }
 }
+
+module.exports = MongoDBConnection;

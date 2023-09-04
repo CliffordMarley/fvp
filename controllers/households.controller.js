@@ -16,7 +16,8 @@ module.exports = class HouseholdsController{
             "Syncronized households!",
             "Failed to syncronize households!",
             "Updated a household!",
-            "Failed to update a household!"
+            "Failed to update a household!",
+            "Batch household re-ipload failed!"
         ]
         this.household = new HouseHoldModel()
         this.identity = new IdentityModel()
@@ -129,6 +130,34 @@ module.exports = class HouseholdsController{
         }catch(err){
             console.log(err)
             this.event.Log(req.username, this.actions[3])
+            res.status(500).json({
+                message:err.message
+            })
+        }
+    }
+
+
+    batchUpload = async (req, res)=>{
+        try{
+            console.log('Batch insert of %s already updated households', req.body.length )
+            let farmerProfileArray = req.body
+
+            for(let household of farmerProfileArray){
+                if(validateHouseholdKeys(farmerProfile)){
+                    household = CastData(household)    
+                    this.household.updateByNationalID(household.National_ID, household)
+                    .then(res=>console.log("%s : Households %s updated!",moment().utc().format(), household.National_ID))
+                    .catch(err=>console.log("%s : Error: %s",moment().utc().format(),err.message))
+                }else{
+                    console.log('%s : Invalid household schema!', moment().utc().format())
+                }
+            }
+            res.status(200).json({
+                message:"Batch farmer profile reloaded successfuly!"
+            })          
+        }catch(err){
+            console.log(err)
+            this.event.Log(req.username, this.actions[4])
             res.status(500).json({
                 message:err.message
             })

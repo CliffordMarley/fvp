@@ -13,6 +13,7 @@ app.use(express.urlencoded({limit:'50mb', extended:true}))
 app.use(express.json({limit:'50mb'}))
 
 
+
 //Setup configurations
 dotenv.config()
 app.set('trust proxy', 1) // trust first proxy
@@ -22,7 +23,13 @@ app.set('port', 8000)
 app.get('/status', (req, res)=>{
     res.json({status:"Success!"})
 })
-
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        console.log("Error in Body: ", req.body)
+        return res.status(400).json({ error: 'Invalid JSON' });
+    }
+    next(err);
+})
 app = configureAppRoutes(app)
 
 //Launch Application

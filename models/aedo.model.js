@@ -2,7 +2,7 @@ const MongoDBConnection = require("../config/dbconn.config");
 
 module.exports = class {
     constructor() {
-        this.dbConnection = new MongoDBConnection('aip_validator');
+        this.dbConnection = MongoDBConnection
         this.collection = null;
         this.initialize()
     }

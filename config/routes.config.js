@@ -11,6 +11,8 @@ configureAppRoutes = (app)=>{
    app.use('/api/v1/', householdRoutes)
    app.use('/api/v1/', organizationUnitRoutes)
 
+   
+
     app.use('*', (req, res)=>{
         res.status(404).send({
             errorMessage:'Invalid API Route!'

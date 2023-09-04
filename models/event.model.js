@@ -2,7 +2,7 @@ const MongoDBConnection = require("../config/dbconn.config");
 const moment = require("moment")
 module.exports = class HouseholdModel {
     constructor() {
-        this.dbConnection = new MongoDBConnection('aip_validator');
+        this.dbConnection = MongoDBConnection
         this.collection = null;
         this.initialize()
     }
