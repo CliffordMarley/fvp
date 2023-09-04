@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 class MongoDBConnection {
   constructor(dbName) {
     this.dbName = dbName;
-    this.url = 'mongodb://aip_validator:Angelsdie1997@aip-validator.agriculture.gov.mw:27017/?authMechanism=DEFAULT';
+    this.url = 'mongodb://aip_validator:Angelsdie1997@localhost:27017/?authMechanism=DEFAULT';
     this.client = null;
     this.db = null;
   }
