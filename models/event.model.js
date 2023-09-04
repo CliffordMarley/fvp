@@ -46,7 +46,7 @@ module.exports = class HouseholdModel {
 
             const eventlog = {username, event, timestamp:moment().format('MMMM Do YYYY, h:mm:ss a')}
             const document = await this.collection.insertOne(eventlog);
-            console.log(`AEDO ${username} ${event}!`)
+            console.log(`%s : AEDO ${username} ${event}!`, moment().utc().format())
             return document;
         } catch (err) {
             throw err;
