@@ -1,6 +1,6 @@
 const MongoDBConnection = require("../config/dbconn.config");
 
-module.exports = class SectionModel {
+module.exports = class  {
     constructor() {
         this.dbConnection = new MongoDBConnection()
         this.collection = null;
