@@ -23,8 +23,11 @@ module.exports = class Auth{
                 return
             }
             const Phone_Number = parseInt(Username)
+            const credentials = {Phone_Number, Password}
 
-            const User = await this.user.ReadOne({Phone_Number, Password})
+            console.table(credentials)
+            const User = await this.user.ReadOne(credentials)
+            console.table(User)
 
             if(User){
                 const access_token = signJSONWebToken(User)
