@@ -25,6 +25,7 @@ module.exports = class{
     }
 
     async Read(filter = null) {
+        
         try {
             if (!this.collection) {
                 throw new Error('Collection not initialized. Call initialize() before using the model.');
@@ -37,6 +38,7 @@ module.exports = class{
         }
     } 
     async ReadOne(filter = null) {
+        console.log('Reading records for : ', filter)
         try {
             if (!this.collection) {
                 throw new Error('Collection not initialized. Call initialize() before using the model.');
