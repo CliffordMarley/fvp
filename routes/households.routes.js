@@ -10,7 +10,7 @@ module.exports = (router)=>{
     
     router.put('/households/:nationalId',restAuth, householdsContoller.updateHousehold)
 
-    router.post('/identities', householdsContoller.InsertNewIdentity)
+    router.post('/identities',restAuth, householdsContoller.InsertNewIdentity)
 
     return router
 }
