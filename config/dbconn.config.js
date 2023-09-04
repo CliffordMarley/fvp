@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 class MongoDBConnection {
-  constructor(dbName) {
-    this.dbName = dbName;
+  constructor() {
+    this.dbName = 'aip_validator';
     this.url = process.env.MONGO_URL;
     this.client = null;
     this.db = null;
