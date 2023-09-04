@@ -1,4 +1,4 @@
-const MongoDBConnection = require("../config/dbconn.config");
+const { MongoClient } = require('mongodb');
 class MongoDBConnection {
   constructor(dbName) {
     this.dbName = dbName;
