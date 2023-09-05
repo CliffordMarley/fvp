@@ -8,7 +8,7 @@ const restAuth = (req, res, next)=>{
         }catch(err){
             console.log(err)
         }
-        if(!req.headers.version || req.headers.version < global.appVersion){
+        if(!req.headers.version || req.headers.version == typeof undefined || req.headers.version < global.appVersion){
             res.status(401).json({message:"Request failed. Please install the latest version of the application!"})
             return
         }
