@@ -7,7 +7,7 @@ const signJSONWebToken = (data) => {
     let token = jwt.sign({ data }, process.env.JWT_SYMMETRIC_KEY, { expiresIn: '30d', algorithm: 'HS256' });
     return token;
   } catch (error) {
-    console.error('Error signing JWT:', error);
+    console.error('Error signing JWT:', error.message);
     throw error;
   }
 }

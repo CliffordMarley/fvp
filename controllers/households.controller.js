@@ -112,7 +112,7 @@ module.exports = class HouseholdsController{
 
     readByEmptySection = async (req, res)=>{
         try{
-            console.log("%s : Loading households with empty sections...", moment().utc().format())
+            console.log("%s : Loading households by EPA...", moment().utc().format())
 
             const offset = parseInt(req.query.offset)
             const limit  = parseInt(req.query.limit)
