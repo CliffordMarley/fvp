@@ -15,7 +15,7 @@ module.exports = class Auth{
 
     Authenticate = async (req, res)=>{
         try{
-            if(!req.headers.version || req.headers.version < global.appVersion){
+            if(!req.headers.version || req.headers.version == typeof undefined  ||  req.headers.version < global.appVersion){
                 res.status(401).json({message:"Login failed. Please install the latest version of the application!"})
                 return
             }
