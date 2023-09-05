@@ -17,7 +17,6 @@ const verifyJSONWebToken = (token) => {
       const decoded = jwt.verify(token, process.env.JWT_SYMMETRIC_KEY);
       return decoded
     } catch (error) {
-      console.error('Error verifying JWT:', error);
       return false
     }
   }
