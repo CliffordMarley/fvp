@@ -3,7 +3,7 @@ const {verifyJSONWebToken} = require('../helpers/auth.helper')
 const restAuth = (req, res, next)=>{
    
     try{
-        if(req.headers.version && req.headers.version < global.appVersion){
+        if(!req.headers.version || req.headers.version < global.appVersion){
             res.status(401).json({message:"Request failed. Please install the latest version of the application!"})
             return
         }
