@@ -1,7 +1,12 @@
 const {verifyJSONWebToken} = require('../helpers/auth.helper')
 
 const restAuth = (req, res, next)=>{
+   
     try{
+        if(req.headers.version && req.headers.version < global.appVersion){
+            res.status(401).json({message:"Request failed. Please install the latest version of the application!"})
+            return
+        }
         if(!req.headers.authorization){
             res.status(401).json({message:"Unauthorized!"})
             return
@@ -10,7 +15,8 @@ const restAuth = (req, res, next)=>{
         const token = req.headers.authorization.split(' ')[1]
         if(token){
             decoded = verifyJSONWebToken(token)
-            req.username =decoded.data.Phone_Number    
+            req.username = decoded.data.Phone_Number    
+            req.Section = decoded.data.Section
         }
 
         if(!decoded){

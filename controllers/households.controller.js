@@ -3,6 +3,11 @@ const HouseHoldModel = require('../models/household.model')
 const IdentityModel = require('../models/identity.model')
 const Event = require('../models/event.model')
 const LoggerModel = require('../models/log.model')
+const TAModel = require('../models/ta.model')
+const EPAModel = require('../models/epa.model')
+const SectionModel = require("../models/section.model")
+        this.section = new SectionModel()
+
 
 const moment = require('moment')
 
@@ -21,7 +26,11 @@ module.exports = class HouseholdsController{
         ]
         this.household = new HouseHoldModel()
         this.identity = new IdentityModel()
+        this.ta = new TAModel()
+        this.section = new SectionModel()
+        this.epa = new EPAModel()
         this.logger = new LoggerModel()
+
     }
 
     readBySection = async (req, res)=>{
@@ -37,29 +46,33 @@ module.exports = class HouseholdsController{
                 res.status(400).json({messge:"Invalid/Empty district name!"})
             }else{
                 
-                const filter = {Section, District}
-                let households = await this.household.Read(filter)
-
-                let otherHouseholdsFilter = {District,Section:null}
-                if(req.username == "994791131"){
-                    otherHouseholdsFilter = {District}
+                //const filter = {Section, District}
+                //let households = await this.household.Read(filter)
+                
+                const EPA_Name = await this.resolveEPAName(req.Section)
+                console.log("Searching by EPA: ",EPA_Name)
+               
+                let filter = {
+                    $or: [
+                    { EPA: EPA_Name },
+                    { EPA: { $in: [null, ""] } }
+                    ],
+                    District
                 }
-                const householdsWithMissingSections = await this.household.Read(otherHouseholdsFilter)
 
-                const villages = []
-                for(let i = 0; i < households.length; i++){
-                    if(!villages.includes(households[i].Village)){
-                        villages.push(households[i].Village)
-                    }
-                }
-                villages.sort()
+                console.log(filter)
+                const householdsWithMissingSectionsCount = await this.household.CountDocuments(filter)
+
+                // const villages = []
+                // for(let i = 0; i < households.length; i++){
+                //     if(!villages.includes(households[i].Village)){
+                //         villages.push(households[i].Village)
+                //     }
+                // }
+                // villages.sort()
                 const responseJson = {
-                    message:`${households.length} farmer records found!`,
-                    data:{
-                        households,
-                        villages,
-                        unassignedHouseholdsCount: householdsWithMissingSections.length
-                    }
+                    message:`${householdsWithMissingSectionsCount} Farmer records found!`,
+                    data:{unassignedHouseholdsCount: householdsWithMissingSectionsCount}
                 }
                 res.setHeader('Content-Length', Buffer.byteLength(JSON.stringify(responseJson)))
                 res.json(responseJson)
@@ -74,6 +87,29 @@ module.exports = class HouseholdsController{
         }
     }
 
+    searchHouseholdByNID = async (req, res)=>{
+        try{
+           
+            const nationalId =  req.params.nationalId
+            console.log("Searching household by National ID: %s...", nationalId)
+            
+            const searchFilter = {"National_ID":nationalId}
+            const householdProfile = await this.household.Read(searchFilter)
+
+            if(householdProfile.length > 0){
+                res.json(householdProfile[0])
+            }else{
+                res.status(404).json({
+                    message:"Household with this National ID could not be found!"
+                })
+            }
+        }catch(err){
+            res.status(500).json({
+                message:err.message
+            })
+        }
+    }
+
     readByEmptySection = async (req, res)=>{
         try{
             console.log("%s : Loading households with empty sections...", moment().utc().format())
@@ -82,20 +118,28 @@ module.exports = class HouseholdsController{
             const limit  = parseInt(req.query.limit)
             const District = req.params.DistrictName.toUpperCase()
 
+            const EPA_Name = await this.resolveEPAName(req.Section)
             let filter = {
                 $or: [
-                  { Section: null },
-                  { Section: "" }
+                  { EPA: EPA_Name },
+                  { EPA: { $in: [null, ""] } }
                 ],
                 District
-            }
-            if(req.username == "994791131"){
-                console.log("Benchmarking test syncronization for large data set!", District)
-                filter = {District}
-            }
-            const householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
-
-            res.json(householdsWithMissingSections)
+              }
+              
+         
+            let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
+            const minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({
+                ADD: householdItem.ADD,
+                District: householdItem.District,
+                National_ID: householdItem.National_ID,
+                Name_Of_Household_Head: householdItem.Name_Of_Household_Head,
+                Updated: householdItem.Updated  ? true : false,
+                Updated_By: householdItem.Updated_By ? householdItem.Updated_By : null
+              }));
+              
+              res.json(minifiedHouseholdList);
+              
         }catch(err){
             console.log(err)
             res.status(500).json({
@@ -143,7 +187,7 @@ module.exports = class HouseholdsController{
             let farmerProfileArray = req.body
 
             for(let household of farmerProfileArray){
-                if(validateHouseholdKeys(farmerProfile)){
+                if(validateHouseholdKeys(household)){
                     household = CastData(household)    
                     this.household.updateByNationalID(household.National_ID, household)
                     .then(res=>console.log("%s : Households %s updated!",moment().utc().format(), household.National_ID))
@@ -189,6 +233,24 @@ module.exports = class HouseholdsController{
                 message:err.message
             })
         }
+    }
+
+    resolveEPAName = (Section_Code)=>{
+       return new Promise(async (resolve, reject)=>{
+            try{
+                //Get section first
+                const Section = await this.section.Read({Section_Code})
+                const epaFilter = {"EPACode":Section[0].EPA}
+
+                const EPA = await this.epa.Read(epaFilter)
+                let EPA_Name = EPA[0].EPA_Name
+                EPA_Name = EPA_Name.toUpperCase()
+                resolve(EPA_Name)
+            }catch(err){
+                console.log(err.message)
+                resolve(null)
+            }
+       })
     }
     
 

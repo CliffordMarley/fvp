@@ -15,6 +15,10 @@ module.exports = class Auth{
 
     Authenticate = async (req, res)=>{
         try{
+            if(!req.headers.version || req.headers.version < global.appVersion){
+                res.status(401).json({message:"Login failed. Please install the latest version of the application!"})
+                return
+            }
             console.log('%s : Authenticating user ...', moment().utc().format())
             const {Username, Password} = req.body
 

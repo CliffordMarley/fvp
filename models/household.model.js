@@ -36,6 +36,8 @@ module.exports = class HouseholdModel {
         }
     }
 
+
+
     async ReadWithPagination (filter = null, offset, limit) {
         try {
             if (!this.collection) {
@@ -43,6 +45,18 @@ module.exports = class HouseholdModel {
             }
             const documents = await this.collection.find(filter).skip(offset).limit(limit).toArray();
             return documents;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async CountDocuments(filter = null) {
+        try {
+            if (!this.collection) {
+                throw new Error('Collection not initialized. Call initialize() before using the model.');
+            }
+            const documentCount = await this.collection.countDocuments(filter);
+            return documentCount;
         } catch (err) {
             throw err;
         }
