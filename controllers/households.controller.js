@@ -72,7 +72,7 @@ module.exports = class HouseholdsController{
                 // villages.sort()
                 const responseJson = {
                     message:`${householdsWithMissingSectionsCount} Farmer records found!`,
-                    data:{unassignedHouseholdsCount: householdsWithMissingSectionsCount, household:[]}
+                    data:{unassignedHouseholdsCount: householdsWithMissingSectionsCount, households:[]}
                 }
                 res.setHeader('Content-Length', Buffer.byteLength(JSON.stringify(responseJson)))
                 res.json(responseJson)
@@ -129,16 +129,18 @@ module.exports = class HouseholdsController{
               
          
             let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
-            const minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({
-                ADD: householdItem.ADD,
-                District: householdItem.District,
-                National_ID: householdItem.National_ID,
-                Name_Of_Household_Head: householdItem.Name_Of_Household_Head,
-                Updated: householdItem.Updated  ? true : false,
-                Updated_By: householdItem.Updated_By ? householdItem.Updated_By : null
-              }));
+            // const minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({
+            //     ADD: householdItem.ADD,
+            //     District: householdItem.District,
+            //     National_ID: householdItem.National_ID,
+            //     Name_Of_Household_Head: householdItem.Name_Of_Household_Head,
+            //     Updated: householdItem.Updated  ? true : false,
+            //     Updated_By: householdItem.Updated_By ? householdItem.Updated_By : null
+            //   }));
               
-              res.json(minifiedHouseholdList);
+            //   res.json(minifiedHouseholdList);
+
+            res.json(householdsWithMissingSections)
               
         }catch(err){
             console.log(err)
