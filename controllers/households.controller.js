@@ -62,17 +62,17 @@ module.exports = class HouseholdsController{
 
                 console.log(filter)
                 const householdsWithMissingSectionsCount = await this.household.CountDocuments(filter)
-
-                // const villages = []
-                // for(let i = 0; i < households.length; i++){
-                //     if(!villages.includes(households[i].Village)){
-                //         villages.push(households[i].Village)
-                //     }
-                // }
-                // villages.sort()
+                const updatedHouseholdsCount = await this.household.CountDocuments({
+                    "Updated_By":req.username
+                })
+    
                 const responseJson = {
                     message:`${householdsWithMissingSectionsCount} Farmer records found!`,
-                    data:{unassignedHouseholdsCount: householdsWithMissingSectionsCount, households:[]}
+                    data:{
+                        unassignedHouseholdsCount: householdsWithMissingSectionsCount, 
+                        updatedHouseholdsCount,
+                        households:[]
+                    }
                 }
                 res.setHeader('Content-Length', Buffer.byteLength(JSON.stringify(responseJson)))
                 res.json(responseJson)
