@@ -4,10 +4,10 @@ const restAuth = (req, res, next)=>{
    
     try{
     
-        if(!req.headers.version || req.headers.version == typeof undefined || req.headers.version < global.appVersion){
-            res.status(401).json({message:"Request failed. Please install the latest version of the application!"})
-            return
-        }
+        // if(!req.headers.version || req.headers.version == typeof undefined || req.headers.version < global.appVersion){
+        //     res.status(401).json({message:"Request failed. Please install the latest version of the application!"})
+        //     return
+        // }
         if(!req.headers.authorization){
             res.status(401).json({message:"Unauthorized!"})
             return
