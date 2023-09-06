@@ -72,7 +72,7 @@ module.exports = class HouseholdsController{
                 // villages.sort()
                 const responseJson = {
                     message:`${householdsWithMissingSectionsCount} Farmer records found!`,
-                    data:{unassignedHouseholdsCount: householdsWithMissingSectionsCount}
+                    data:{unassignedHouseholdsCount: householdsWithMissingSectionsCount, household:[]}
                 }
                 res.setHeader('Content-Length', Buffer.byteLength(JSON.stringify(responseJson)))
                 res.json(responseJson)
