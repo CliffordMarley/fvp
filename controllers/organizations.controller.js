@@ -53,7 +53,8 @@ module.exports = class {
                     villages = villages.concat(villagesRead)
                 }
 
-                villages.sort()
+                villages.sort((a, b) => a.Village_Name.localeCompare(b.Village_Name));
+
 
                 const organizationUnit = {
                     "ta":TAs,
