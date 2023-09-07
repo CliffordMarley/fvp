@@ -53,7 +53,11 @@ module.exports = class {
                     villages = villages.concat(villagesRead)
                 }
 
-                villages.sort((a, b) => a.Village_Name.localeCompare(b.Village_Name));
+                try{
+                    villages.sort((a, b) => a.Village_Name.localeCompare(b.Village_Name));
+                }catch(err){
+                    console.log("%s : Error=> %s " , moment().utc().format(),err.message)
+                }
 
 
                 const organizationUnit = {
