@@ -1,53 +1,34 @@
 const crypto = require('crypto');
-const {createClient} = require('redis')
+const { createClient } = require('redis');
 
-
-const redisConnect = () => {
-    const redisClient = createClient({
-        host:"localhost",
-        port:6379
-    });
-  
-    redisClient.on('connect', () => {
-      console.log('Connection to Redis Database was successful!');
-    });
-  
-    redisClient.on('error', (err) => {
-      console.error('Error connecting to Redis:', err);
-      // Close the client on error to prevent further use
-      redisClient.quit();
-    });
-  
-    return redisClient;
-  };
-  
-
-
-const Hash = (jsonString)=>{
-    try {
-        // Create an MD5 hash object
-        const md5Hash = crypto.createHash('md5');
-
-        // Update the hash object with the JSON string
-        md5Hash.update(jsonString);
-
-        // Calculate the MD5 hash and return it as a hexadecimal string
-        const hashResult = md5Hash.digest('hex');
-        
-        return hashResult;
-    } catch (error) {
-        console.error('Error hashing JSON:', error);
-        return null;
+class RedisCache {
+    constructor() {
+        this.client = this.createRedisClient();
     }
-}
-const getCache = async (key) => {
-    let client = null;
-    try {
-        client = await redisConnect();
 
-        if (client) {
+    createRedisClient() {
+        const redisClient = createClient({
+            host: "localhost",
+            port: 6379
+        });
+
+        redisClient.on('connect', () => {
+            console.log('Connection to Redis Database was successful!');
+        });
+
+        redisClient.on('error', (err) => {
+            console.error('Error connecting to Redis:', err);
+            // Close the client on error to prevent further use
+            redisClient.quit();
+        });
+
+        return redisClient;
+    }
+
+    async getCache(key) {
+        try {
             return new Promise((resolve, reject) => {
-                client.get(key, (err, result) => {
+                this.client.get(key, (err, result) => {
                     if (err) {
                         console.error(err);
                         reject(err);
@@ -56,45 +37,45 @@ const getCache = async (key) => {
                     }
                 });
             });
-        } else {
+        } catch (err) {
+            console.error(err.message);
             return null;
         }
-    } catch (err) {
-        console.error(err.message);
-        return null;
-    } finally {
-        if (client !== null) {
-            console.log('Disconnecting Redis client in getCache');
-            client.quit((err) => {
-                if (err) {
-                    console.error('Error disconnecting Redis client:', err);
-                } else {
-                    console.log('Redis client disconnected successfully.');
-                }
-            });
-        }
     }
-};
 
-const setCache = async (key, value) => {
-    let client = null;
-    try {
-        client = await redisConnect();
-
-        if (client) {
+    async setCache(key, value) {
+        try {
             // Set the key-value pair with an 8-hour expiration time (8 * 3600 seconds)
-            await client.set(key, JSON.stringify(value), 'EX', 8 * 3600);
+            await this.client.set(key, JSON.stringify(value), 'EX', 8 * 3600);
             return true;
-        } else {
+        } catch (err) {
+            console.error(err);
             return false;
         }
-    } catch (err) {
-        console.error(err);
-        return false;
-    } finally {
-        if (client !== null) {
-            console.log('Disconnecting Redis client in setCache');
-            client.quit((err) => {
+    }
+
+    Hash(jsonString) {
+        try {
+            // Create an MD5 hash object
+            const md5Hash = crypto.createHash('md5');
+
+            // Update the hash object with the JSON string
+            md5Hash.update(jsonString);
+
+            // Calculate the MD5 hash and return it as a hexadecimal string
+            const hashResult = md5Hash.digest('hex');
+
+            return hashResult;
+        } catch (error) {
+            console.error('Error hashing JSON:', error);
+            return null;
+        }
+    }
+
+    disconnect() {
+        if (this.client) {
+            console.log('Disconnecting Redis client');
+            this.client.quit((err) => {
                 if (err) {
                     console.error('Error disconnecting Redis client:', err);
                 } else {
@@ -103,7 +84,6 @@ const setCache = async (key, value) => {
             });
         }
     }
-};
+}
 
-
-module.exports = {setCache, getCache, Hash}
+module.exports = RedisCache;

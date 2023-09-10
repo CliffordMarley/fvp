@@ -6,7 +6,7 @@ const LoggerModel = require('../models/log.model')
 const TAModel = require('../models/ta.model')
 const EPAModel = require('../models/epa.model')
 const SectionModel = require("../models/section.model")
-const {setCache, getCache, Hash} = require('../helpers/cache.helper')
+const RedisCache = require('../helpers/cache.helper')
 
 
 const moment = require('moment')
@@ -30,6 +30,7 @@ module.exports = class HouseholdsController{
         this.section = new SectionModel()
         this.epa = new EPAModel()
         this.logger = new LoggerModel()
+        this.cache = new RedisCache()
 
     }
 
@@ -132,10 +133,10 @@ module.exports = class HouseholdsController{
             searchObject.offset = offset
             searchObject.limit = limit
 
-            const memoryKey = Hash(JSON.stringify(searchObject))
+            const memoryKey = this.cache.Hash(JSON.stringify(searchObject))
             console.log("%s : Generated memory key : %s", moment().utc().format(), memoryKey )
 
-            let minifiedHouseholdList = await getCache(memoryKey)
+            let minifiedHouseholdList = await this.cache.getCache(memoryKey)
 
             if(!minifiedHouseholdList){
                 let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
@@ -149,7 +150,7 @@ module.exports = class HouseholdsController{
                 }));
                 
                 console.log("%s : Storing batch in cache!",  moment().utc().format())
-                setCache(memoryKey, minifiedHouseholdList)
+                this.cache.setCache(memoryKey, minifiedHouseholdList)
             }
             
             res.json(minifiedHouseholdList);

@@ -4,7 +4,10 @@ const EPAModel = require('../models/epa.model')
 const VillageModel = require("../models/village.model")
 const DistrictModel = require("../models/district.model")
 const ConstituencyModel = require("../models/constituency.model")
+const RedisCache = require('../helpers/cache.helper')
+
 const moment = require('moment')
+
 
 const {setCache, getCache, Hash} = require('../helpers/cache.helper')
 
@@ -21,6 +24,7 @@ module.exports = class {
         this.village = new VillageModel()
         this.district = new DistrictModel()
         this.constituency = new ConstituencyModel()
+        this.cache = new RedisCache()
     }
 
     Read = async (req, res)=>{
@@ -31,13 +35,13 @@ module.exports = class {
             //Find section
             let keyPreparedValues = filter
             keyPreparedValues.Entity = "OrganizationUnit"
-            const  memoryKey = Hash(JSON.stringify(keyPreparedValues))
+            const  memoryKey = this.cache.Hash(JSON.stringify(keyPreparedValues))
 
             console.log("Cache key: ", memoryKey)
 
             let organizationUnit = null
 
-            organizationUnit = await getCache(memoryKey)
+            organizationUnit = await this.cache.getCache(memoryKey)
 
             if(!organizationUnit){
                 const sections = await this.section.Read(filter)
@@ -85,7 +89,7 @@ module.exports = class {
 
                     res.json(organizationUnit)
 
-                    setCache(memoryKey, organizationUnit)
+                    this.cache.setCache(memoryKey, organizationUnit)
                     
                 }else{
                     res.status(404).json({message:"Invalid Section Code!"})
