@@ -38,30 +38,35 @@ const Hash = (jsonString)=>{
     }
 }
 
-const getCache = async (key)=>{
-    let client = null
-    try{
-        client = await redisConnect()
+const getCache = async (key) => {
+    let client = null;
+    try {
+        client = await redisConnect();
 
-        if(client){
-            client.get(key, (err, result)=>{
-                if(err){
-                    console.log(err)
-                    return false
-                }else{
-                    return JSON.parse(result)
-                }
-            })
-        }else{
-            return false
+        if (client) {
+            return new Promise((resolve, reject) => {
+                client.get(key, (err, result) => {
+                    if (err) {
+                        console.error(err);
+                        reject(err);
+                    } else {
+                        resolve(result ? JSON.parse(result) : null);
+                    }
+                });
+            });
+        } else {
+            return null;
         }
-    }catch(err){
-        console.log(err.message)
-        return false
-    }finally{
-        //client != null ? client.disconnect() : {}
+    } catch (err) {
+        console.error(err.message);
+        return null;
+    } finally {
+        if (client !== null) {
+            client.quit(); // Use quit() to disconnect from Redis
+        }
     }
-}
+};
+
 
 const setCache = async (key, value) => {
     let client = null;
@@ -80,7 +85,7 @@ const setCache = async (key, value) => {
         return false;
     } finally {
         if (client !== null) {
-            client.disconnect();
+            client.quit();
         }
     }
 };
