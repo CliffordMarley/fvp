@@ -130,7 +130,7 @@ module.exports = class HouseholdsController{
             let minifiedHouseholdList = await this.cache.getCache(memoryKey)
             console.log("Cache result: ", minifiedHouseholdList)
 
-            if(!minifiedHouseholdList || minifiedHouseholdList.length == 0){
+            if(!minifiedHouseholdList || minifiedHouseholdList.length == 0 || minifiedHouseholdList == null){
                 console.log("Searching from database with filter: ", filter)
                 let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
                 minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({

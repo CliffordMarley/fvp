@@ -42,7 +42,7 @@ module.exports = class {
 
             organizationUnit = await this.cache.getCache(memoryKey)
 
-            if(!organizationUnit){
+            if(!organizationUnit || organizationUnit == null){
                 const sections = await this.section.Read(filter)
                 if(sections && sections.length > 0){
                     let Section = sections[0]
