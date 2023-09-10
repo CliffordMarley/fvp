@@ -57,7 +57,7 @@ const getCache = async (key)=>{
         console.log(err.message)
         return false
     }finally{
-        client != null ? client.disconnect() : {}
+        client != null ? client.quit() : {}
     }
 }
 
@@ -78,7 +78,7 @@ const setCache = async (key, value) => {
         return false;
     } finally {
         if (client !== null) {
-            client.disconnect();
+            client.quit();
         }
     }
 };
