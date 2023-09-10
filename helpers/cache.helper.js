@@ -1,65 +1,23 @@
 const crypto = require('crypto');
-const {createClient} = require('redis')
-
+const { createClient } = require('redis');
 
 const redisConnect = () => {
-  try{
-    const redisClient = createClient()
+  const redisClient = createClient();
 
-    redisClient.on('connect', () => {
-        console.log('Connection to Redis Database was successful!')
-    })
+  redisClient.on('connect', () => {
+    console.log('Connection to Redis Database was successful!');
+  });
 
-    return redisClient
+  redisClient.on('error', (err) => {
+    console.error('Error connecting to Redis:', err);
+    // Close the client on error to prevent further use
+    redisClient.quit();
+  });
 
-  }catch(err){
-    return false
-  }
-}
+  return redisClient;
+};
 
 
-const Hash = (jsonString)=>{
-    try {
-        // Create an MD5 hash object
-        const md5Hash = crypto.createHash('md5');
-
-        // Update the hash object with the JSON string
-        md5Hash.update(jsonString);
-
-        // Calculate the MD5 hash and return it as a hexadecimal string
-        const hashResult = md5Hash.digest('hex');
-        
-        return hashResult;
-    } catch (error) {
-        console.error('Error hashing JSON:', error);
-        return null;
-    }
-}
-
-const getCache = async (key)=>{
-    let client = null
-    try{
-        client = await redisConnect()
-
-        if(client){
-            client.get(key, (err, result)=>{
-                if(err){
-                    console.log(err)
-                    return false
-                }else{
-                    return JSON.parse(result)
-                }
-            })
-        }else{
-            return false
-        }
-    }catch(err){
-        console.log(err.message)
-        return false
-    }finally{
-        client != null ? client.disconnect() : {}
-    }
-}
 
 const setCache = async (key, value) => {
     let client = null;
