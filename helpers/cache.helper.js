@@ -3,7 +3,10 @@ const {createClient} = require('redis')
 
 
 const redisConnect = () => {
-    const redisClient = createClient();
+    const redisClient = createClient({
+        host:"localhost",
+        port:6379
+    });
   
     redisClient.on('connect', () => {
       console.log('Connection to Redis Database was successful!');
