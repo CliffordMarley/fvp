@@ -40,7 +40,6 @@ const Hash = (jsonString)=>{
         return null;
     }
 }
-
 const getCache = async (key) => {
     let client = null;
     try {
@@ -65,11 +64,17 @@ const getCache = async (key) => {
         return null;
     } finally {
         if (client !== null) {
-            client.quit(); // Use quit() to disconnect from Redis
+            console.log('Disconnecting Redis client in getCache');
+            client.quit((err) => {
+                if (err) {
+                    console.error('Error disconnecting Redis client:', err);
+                } else {
+                    console.log('Redis client disconnected successfully.');
+                }
+            });
         }
     }
 };
-
 
 const setCache = async (key, value) => {
     let client = null;
@@ -88,9 +93,17 @@ const setCache = async (key, value) => {
         return false;
     } finally {
         if (client !== null) {
-            client.quit();
+            console.log('Disconnecting Redis client in setCache');
+            client.quit((err) => {
+                if (err) {
+                    console.error('Error disconnecting Redis client:', err);
+                } else {
+                    console.log('Redis client disconnected successfully.');
+                }
+            });
         }
     }
 };
+
 
 module.exports = {setCache, getCache, Hash}
