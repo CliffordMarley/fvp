@@ -4,7 +4,7 @@ const {createClient} = require('redis')
 
 const redisConnect = () => {
   try{
-    const redisClient = redis.createClient()
+    const redisClient = createClient()
 
     redisClient.on('connect', () => {
         console.log('Connection to Redis Database was successful!')
@@ -57,7 +57,7 @@ const getCache = async (key)=>{
         console.log(err.message)
         return false
     }finally{
-        client != null ? client.quit() : {}
+        client != null ? client.disconnect() : {}
     }
 }
 
@@ -78,7 +78,7 @@ const setCache = async (key, value) => {
         return false;
     } finally {
         if (client !== null) {
-            client.quit();
+            client.disconnect();
         }
     }
 };
