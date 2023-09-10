@@ -6,7 +6,7 @@ const LoggerModel = require('../models/log.model')
 const TAModel = require('../models/ta.model')
 const EPAModel = require('../models/epa.model')
 const SectionModel = require("../models/section.model")
-        this.section = new SectionModel()
+const {setCache, getCache, Hash} = require('../helpers/cache.helper')
 
 
 const moment = require('moment')
@@ -60,6 +60,7 @@ module.exports = class HouseholdsController{
                     District
                 }
 
+                const 
                 console.log(filter)
                 const householdsWithMissingSectionsCount = await this.household.CountDocuments(filter)
                 const updatedHouseholdsCount = await this.household.CountDocuments({
@@ -125,22 +126,34 @@ module.exports = class HouseholdsController{
                   { EPA: { $in: [null, ""] } }
                 ],
                 District
-              }
-              
-         
-            let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
-            const minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({
-                ADD: householdItem.ADD,
-                District: householdItem.District,
-                National_ID: householdItem.National_ID,
-                Name_Of_Household_Head: householdItem.Name_Of_Household_Head,
-                Updated: householdItem.Updated  ? true : false,
-                Updated_By: householdItem.Updated_By ? householdItem.Updated_By : null
-              }));
-              
-               res.json(minifiedHouseholdList);
+            
+            }
 
-            //res.json(householdsWithMissingSections)
+            let searchObject = filter
+            searchObject.offset = offset
+            searchObject.limit = limit
+
+            const memoryKey = Hash(JSON.stringify(searchObject))
+            console.log("%s : Generated memory key : %s", moment().utc().format(), memoryKey )
+
+            let minifiedHouseholdList = await getCache(memoryKey)
+
+            if(!minifiedHouseholdList){
+                let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
+                minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({
+                    ADD: householdItem.ADD,
+                    District: householdItem.District,
+                    National_ID: householdItem.National_ID,
+                    Name_Of_Household_Head: householdItem.Name_Of_Household_Head,
+                    Updated: householdItem.Updated  ? true : false,
+                    Updated_By: householdItem.Updated_By ? householdItem.Updated_By : null
+                }));
+                
+                console.log("%s : Storing batch in cache!",  moment().utc().format())
+                setCache(memoryKey, minifiedHouseholdList)
+            }
+            
+            res.json(minifiedHouseholdList);
               
         }catch(err){
             console.log(err)
