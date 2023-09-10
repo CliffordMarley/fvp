@@ -128,7 +128,7 @@ module.exports = class HouseholdsController{
             console.log("%s : Generated memory key : %s", moment().utc().format(), memoryKey )
 
             let minifiedHouseholdList = await this.cache.getCache(memoryKey)
-            console.log("Cache result: ", minifiedHouseholdList)
+            console.log("Cache result for Key %s: %s ", memoryKey, minifiedHouseholdList.length )
 
             if(!minifiedHouseholdList || minifiedHouseholdList.length == 0 || minifiedHouseholdList == null){
                 console.log("Searching from database with filter: ", filter)
@@ -142,7 +142,7 @@ module.exports = class HouseholdsController{
                     Updated_By: householdItem.Updated_By ? householdItem.Updated_By : null
                 }));
 
-                console.log("Minified household batch", minifiedHouseholdList)
+                console.log("Minified household batch", minifiedHouseholdList.length)
                 
                 console.log("%s : Storing batch in cache!",  moment().utc().format())
                 this.cache.setCache(memoryKey, minifiedHouseholdList)
