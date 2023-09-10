@@ -128,7 +128,7 @@ module.exports = class HouseholdsController{
             console.log("%s : Generated memory key : %s", moment().utc().format(), memoryKey )
 
             let minifiedHouseholdList = await this.cache.getCache(memoryKey)
-            console.log("Cache result for Key %s: %s ", memoryKey, minifiedHouseholdList.length )
+            console.log("Cache result for Key %s: %s ", memoryKey, (minifiedHouseholdList? minifiedHouseholdList.length : 0) )
 
             if(!minifiedHouseholdList || minifiedHouseholdList.length == 0 || minifiedHouseholdList == null){
                 console.log("Searching from database with filter: ", filter)
