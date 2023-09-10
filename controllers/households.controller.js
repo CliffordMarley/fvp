@@ -134,6 +134,8 @@ module.exports = class HouseholdsController{
 
             let minifiedHouseholdList = await this.cache.getCache(memoryKey)
 
+            
+
             if(!minifiedHouseholdList || minifiedHouseholdList.length == 0){
                 let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
                 minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({
@@ -144,6 +146,8 @@ module.exports = class HouseholdsController{
                     Updated: householdItem.Updated  ? true : false,
                     Updated_By: householdItem.Updated_By ? householdItem.Updated_By : null
                 }));
+
+                console.log("Minified household batch", minifiedHouseholdList)
                 
                 console.log("%s : Storing batch in cache!",  moment().utc().format())
                 this.cache.setCache(memoryKey, minifiedHouseholdList)
