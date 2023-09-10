@@ -33,9 +33,7 @@ module.exports = class {
             const filter = req.params
             
             //Find section
-            let keyPreparedValues = filter
-            keyPreparedValues.Entity = "OrganizationUnit"
-            const  memoryKey = this.cache.Hash(JSON.stringify(keyPreparedValues))
+            const  memoryKey = filter.Section_Code
 
             console.log("Cache key: ", memoryKey)
 
@@ -44,7 +42,7 @@ module.exports = class {
 
             organizationUnit = await this.cache.getCache(memoryKey)
 
-            if(!organizationUnit || organizationUnit == []){
+            if(!organizationUnit){
                 const sections = await this.section.Read(filter)
                 if(sections && sections.length > 0){
                     let Section = sections[0]
