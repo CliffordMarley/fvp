@@ -122,17 +122,14 @@ module.exports = class HouseholdsController{
                   { EPA: { $in: [null, ""] } }
                 ],
                 District
-            }
+            }       
 
-            let searchObject = filter
-            searchObject.offset = offset
-            searchObject.limit = limit
-
-            const memoryKey = this.cache.Hash(JSON.stringify(searchObject))
+            const memoryKey = this.cache.Hash(`${JSON.stringify(filter)}, offset: ${offset}, limit : ${limit}`)
             console.log("%s : Generated memory key : %s", moment().utc().format(), memoryKey )
 
             let minifiedHouseholdList = await this.cache.getCache(memoryKey)
             console.log("Cache result: ", minifiedHouseholdList)
+
             if(!minifiedHouseholdList || minifiedHouseholdList.length == 0){
                 console.log("Searching from database with filter: ", filter)
                 let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
