@@ -60,7 +60,6 @@ module.exports = class HouseholdsController{
                     District
                 }
 
-                const 
                 console.log(filter)
                 const householdsWithMissingSectionsCount = await this.household.CountDocuments(filter)
                 const updatedHouseholdsCount = await this.household.CountDocuments({
