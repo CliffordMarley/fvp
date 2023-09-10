@@ -122,7 +122,6 @@ module.exports = class HouseholdsController{
                   { EPA: { $in: [null, ""] } }
                 ],
                 District
-            
             }
 
             let searchObject = filter
@@ -134,9 +133,8 @@ module.exports = class HouseholdsController{
 
             let minifiedHouseholdList = await this.cache.getCache(memoryKey)
 
-            
-
             if(!minifiedHouseholdList || minifiedHouseholdList.length == 0){
+                console.log("Searching from database with filter: ", filter)
                 let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
                 minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({
                     ADD: householdItem.ADD,
