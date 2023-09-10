@@ -41,9 +41,10 @@ module.exports = class {
 
             let organizationUnit = null
 
+
             organizationUnit = await this.cache.getCache(memoryKey)
 
-            if(!organizationUnit){
+            if(!organizationUnit || organizationUnit == []){
                 const sections = await this.section.Read(filter)
                 if(sections && sections.length > 0){
                     let Section = sections[0]
@@ -89,6 +90,7 @@ module.exports = class {
 
                     res.json(organizationUnit)
 
+                    console.log("Storing organization unit in cache!")
                     this.cache.setCache(memoryKey, organizationUnit)
                     
                 }else{

@@ -33,6 +33,9 @@ class RedisCache {
                         console.error(err);
                         reject(err);
                     } else {
+                        if(result){
+                            console.log("Found results from cache!")
+                        }
                         resolve(result ? JSON.parse(result) : null);
                     }
                 });

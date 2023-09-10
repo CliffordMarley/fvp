@@ -46,10 +46,6 @@ module.exports = class HouseholdsController{
             }else if(!Isset(District)){
                 res.status(400).json({messge:"Invalid/Empty district name!"})
             }else{
-                
-                //const filter = {Section, District}
-                //let households = await this.household.Read(filter)
-                
                 const EPA_Name = await this.resolveEPAName(req.Section)
                 console.log("Searching by EPA: ",EPA_Name)
                
@@ -138,7 +134,7 @@ module.exports = class HouseholdsController{
 
             let minifiedHouseholdList = await this.cache.getCache(memoryKey)
 
-            if(!minifiedHouseholdList){
+            if(!minifiedHouseholdList || minifiedHouseholdList.length == 0){
                 let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
                 minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({
                     ADD: householdItem.ADD,
