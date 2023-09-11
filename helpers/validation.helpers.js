@@ -33,16 +33,12 @@ function validateHouseholdKeys(data) {
         "In_Livestock_Farming",
         "Land_Ownership_Type",
         "Last_Season_Production",
-        "Major_Enterprize",
-        "NRB_Validation",
         "Name_Of_Household_Head",
         "National_ID",
         "Purpose_Of_Production",
         "Section",
         "Sex",
         "TA",
-        "Total_Arable_Land_Size",
-        "Total_Arable_Land_Used",
         "Updated_By",
         "Village",
         "_id"
@@ -54,7 +50,7 @@ function validateHouseholdKeys(data) {
         const booleanValueIsNotFalse = typeof data[key] === 'boolean' && data[key] !== false;
     
         if (keyMissing || valueIsNullUndefined || booleanValueIsNotFalse) {
-          //  console.log(`Missing or invalid key: ${key}`);
+            console.log(`Missing or invalid key: ${key}`);
         }
     
         // Return true if any of the conditions are met
