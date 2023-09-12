@@ -99,6 +99,7 @@ module.exports = class {
                 res.json(organizationUnit)
             }
         }catch(err){
+            console.log(err)
             res.status(500).json({
                 message:err.message,
                 err
