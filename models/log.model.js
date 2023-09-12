@@ -29,8 +29,13 @@ module.exports = class  {
             if (!this.collection) {
                 throw new Error('Collection not initialized. Call initialize() before using the model.');
             }
-            await this.collection.insertOne(data)
-            return true;
+            if(data == null || data == typeof undefined || data == []){
+                return true
+            }else{
+                await this.collection.insertOne(data)
+                return true;
+            }
+            
         } catch (err) {
             console.log(err.message)
             throw err;
