@@ -38,15 +38,15 @@ module.exports = class HouseholdModel {
 
     async Log(username, event, extra = null){
         try {
-            if (!this.collection) {
-                throw new Error('Collection not initialized. Call initialize() before using the model.');
-            }
+            // if (!this.collection) {
+            //     throw new Error('Collection not initialized. Call initialize() before using the model.');
+            // }
             
-            if(!username && !event) return 
+            // if(!username && !event) return 
 
-            const eventlog = {username, event, timestamp:moment().format('MMMM Do YYYY, h:mm:ss a')}
-            const document = await this.collection.insertOne(eventlog);
-            console.log(`%s : AEDO ${username} ${event}!`, moment().utc().format())
+            // const eventlog = {username, event, timestamp:moment().format('MMMM Do YYYY, h:mm:ss a')}
+            // const document = await this.collection.insertOne(eventlog);
+            // console.log(`%s : AEDO ${username} ${event}!`, moment().utc().format())
             return document;
         } catch (err) {
             throw err;

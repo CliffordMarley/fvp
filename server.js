@@ -13,7 +13,6 @@ app.use(express.urlencoded({limit:'50mb', extended:true}))
 app.use(express.json({limit:'50mb'}))
 
 
-
 //Setup configurations
 dotenv.config()
 app.set('trust proxy', 1) // trust first proxy

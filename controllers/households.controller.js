@@ -132,7 +132,7 @@ module.exports = class HouseholdsController{
             console.log("Cache result for Key %s: %s ", memoryKey, (minifiedHouseholdList? minifiedHouseholdList.length : 0) )
 
             if(!minifiedHouseholdList || minifiedHouseholdList.length == 0 || minifiedHouseholdList == null){
-                console.log("Searching from database with filter: ", filter)
+                console.log("Searching from database... ")
                 let householdsWithMissingSections = await this.household.ReadWithPagination(filter, offset, limit)
                 minifiedHouseholdList = householdsWithMissingSections.map((householdItem, index) => ({
                     ADD: householdItem.ADD,
@@ -143,9 +143,9 @@ module.exports = class HouseholdsController{
                     Updated_By: householdItem.Updated_By ? householdItem.Updated_By : null
                 }));
 
-                console.log("Minified household batch", minifiedHouseholdList.length)
+                console.log("%s : Minified household records : %s",moment().utc().format(), minifiedHouseholdList.length)
                 
-                console.log("%s : Storing batch in cache!",  moment().utc().format())
+                console.log("%s : Storing records in cache!",  moment().utc().format())
                 this.cache.setCache(memoryKey, minifiedHouseholdList)
             }
             

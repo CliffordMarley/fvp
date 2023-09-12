@@ -6,7 +6,7 @@ class RedisCache {
         this.client = this.createRedisClient();
     }
 
-    createRedisClient() {
+        createRedisClient() {
         const redisClient = createClient({
             host: "127.0.0.1",
             port: 6379
@@ -25,42 +25,27 @@ class RedisCache {
         return redisClient;
     }
 
- async getCache(key) {
+
+    async getCache(key) {
         try {
-            const result = await redisClient.get(key);
-    
-            if (result !== null) {
-                console.log("Found results from cache!");
-                return JSON.parse(result);
-            } else {
-                return null;
-            }
+            return new Promise((resolve, reject) => {
+                this.client.get(key, (err, result) => {
+                    if (err) {
+                        console.message(err.message);
+                        resolve(null);
+                    } else {
+                        if(result){
+                            console.log("Found results from cache!")
+                        }
+                        resolve(result ? JSON.parse(result) : null);
+                    }
+                });
+            });
         } catch (err) {
-            console.log("Cache encountered a connection error!");
+            console.message(err.message);
             return null;
         }
     }
-
-    // async getCache(key) {
-    //     try {
-    //         return new Promise((resolve, reject) => {
-    //             this.client.get(key, (err, result) => {
-    //                 if (err) {
-    //                     console.message(err.message);
-    //                     resolve(null);
-    //                 } else {
-    //                     if(result){
-    //                         console.log("Found results from cache!")
-    //                     }
-    //                     resolve(result ? JSON.parse(result) : null);
-    //                 }
-    //             });
-    //         });
-    //     } catch (err) {
-    //         console.message(err.message);
-    //         return null;
-    //     }
-    // }
 
     async setCache(key, value) {
         try {
