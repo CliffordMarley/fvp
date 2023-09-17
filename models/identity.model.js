@@ -35,6 +35,17 @@ module.exports = class HouseholdModel {
             throw err;
         }
     }
+    async ReadOne(filter = null) {
+        try {
+            if (!this.collection) {
+                throw new Error('Collection not initialized. Call initialize() before using the model.');
+            }
+            const document = await this.collection.findOne(filter);
+            return document;
+        } catch (err) {
+            throw err;
+        }
+    }
 
     async Create(data) {
         try {

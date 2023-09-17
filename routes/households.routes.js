@@ -13,5 +13,7 @@ module.exports = (router)=>{
     router.post('/households/batchUpload',restAuth, householdsContoller.batchUpload)
     router.post('/identities',restAuth, householdsContoller.InsertNewIdentity)
 
+    router.get('/maltis/identity/:national_id', householdsContoller.verifyIdentity)
+
     return router
 }

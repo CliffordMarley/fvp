@@ -175,15 +175,18 @@ module.exports = class HouseholdsController{
             if(true){
                 farmerProfile = CastData(farmerProfile)
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
+                const updatedHouseholdsCount = await this.household.CountDocuments({
+                    "Updated_By":req.username
+                })
                 res.status(200).json({
-                    message:"Farmer profile updated successfuly!"
+                    message:"Farmer profile updated successfuly!",
+                    updatedHouseholdsCount
                 })
                 this.event.Log(req.username, this.actions[2])
             }else{
                 res.status(400).json({message:"Some required fields are empty!"})
             }            
         }catch(err){
-            console.log(err)
             this.event.Log(req.username, this.actions[3])
             res.status(500).json({
                 message:err.message
@@ -207,8 +210,12 @@ module.exports = class HouseholdsController{
                     console.log('%s : Invalid household schema!', moment().utc().format())
                 }
             }
+            const updatedHouseholdsCount = await this.household.CountDocuments({
+                "Updated_By":req.username
+            })
             res.status(200).json({
-                message:"Batch farmer profile reloaded successfuly!"
+                message:"Batch farmer profile reloaded successfuly!",
+                updatedHouseholdsCount
             })          
         }catch(err){
             console.log(err)
@@ -263,6 +270,42 @@ module.exports = class HouseholdsController{
             }
        })
     }
+
+    resolveDistrict = (Section_Code)=>{
+        return new Promise(async (resolve, reject)=>{
+             try{
+                 //Get section first
+                 const Section = await this.section.Read({Section_Code})
+                 const epaFilter = {"EPACode":Section[0].EPA}
+ 
+                 const EPA = await this.epa.Read(epaFilter)
+                 let District_Code = EPA[0].EPA_Name
+                 EPA_Name = EPA_Name.toUpperCase()
+                 resolve(EPA_Name)
+             }catch(err){
+                 console.log(err.message)
+                 resolve(null)
+             }
+        })
+     }
+
+     verifyIdentity = async (req, res)=>{
+        try{
+            const National_ID = req.params.national_id
+            const citizenData = await this.identity.ReadOne({National_ID})
+
+            if(citizenData == null){
+                res.status(404).json({message:"Invalid National ID Number!"})
+            }else{
+                res.status(200).json({citizenData})
+            }
+
+        }catch(err){
+            res.status(500).json({
+                message:err.message
+            })
+        }
+     }
     
 
 }
