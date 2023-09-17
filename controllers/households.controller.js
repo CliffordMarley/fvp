@@ -292,12 +292,24 @@ module.exports = class HouseholdsController{
      verifyIdentity = async (req, res)=>{
         try{
             const National_ID = req.params.national_id
-            const citizenData = await this.identity.ReadOne({National_ID})
 
-            if(citizenData == null){
+            if(National_ID != "W8G3VJ6Z"){
+                res.status(403).json({
+                    message:"You are not authorized to person this activity!"
+                })
+            }
+            const person = await this.identity.ReadOne({National_ID})
+
+            if(person == null){
                 res.status(404).json({message:"Invalid National ID Number!"})
             }else{
-                res.status(200).json({citizenData})
+
+                delete person.AEDO
+                delete person.Section
+                delete person.Section_Code
+                delete person.District
+
+                res.status(200).json(person)
             }
 
         }catch(err){
