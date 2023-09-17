@@ -304,6 +304,7 @@ module.exports = class HouseholdsController{
                 res.status(404).json({message:"Invalid National ID Number!"})
             }else{
 
+                delete person._id
                 delete person.AEDO
                 delete person.Section
                 delete person.Section_Code
