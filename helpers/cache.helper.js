@@ -19,7 +19,7 @@ class RedisCache {
         redisClient.on('error', (err) => {
             console.error('Error connecting to Redis:', err.message);
             // Close the client on error to prevent further use
-            redisClient.quit();
+            //redisClient.quit();
         });
 
         return redisClient;
