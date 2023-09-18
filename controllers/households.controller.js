@@ -176,10 +176,10 @@ module.exports = class HouseholdsController{
                 
                 farmerProfile = CastData(farmerProfile)
 
-                if(farmerProfile.Land_Ownership_Type.includes(['OWNED', 'OWNED AND RENTED', 'RENTED' ]) && (!Isset(farmerProfile.Total_Arable_Land_Size) || !Isset(farmerProfile.Total_Arable_Land_Used))){
-                    res.status(400).json({message:"Please provide land size information!"})
-                    return
-                }
+                // if(farmerProfile.Land_Ownership_Type.includes(['OWNED', 'OWNED AND RENTED', 'RENTED' ]) && (!Isset(farmerProfile.Total_Arable_Land_Size) || !Isset(farmerProfile.Total_Arable_Land_Used))){
+                //     res.status(400).json({message:"Please provide land size information!"})
+                //     return
+                // }
                 
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 const updatedHouseholdsCount = await this.household.CountDocuments({
