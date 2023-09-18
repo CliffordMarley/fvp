@@ -31,7 +31,7 @@ class RedisCache {
             return new Promise((resolve, reject) => {
                 this.client.get(key, (err, result) => {
                     if (err) {
-                        console.message(err.message);
+                        console.log(err.message);
                         resolve(null);
                     } else {
                         if(result){
@@ -42,7 +42,7 @@ class RedisCache {
                 });
             });
         } catch (err) {
-            console.message(err.message);
+            console.log(err.message);
             return null;
         }
     }
