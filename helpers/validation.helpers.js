@@ -22,7 +22,6 @@ function validateHouseholdData(data) {
 function validateHouseholdKeys(data) {
     const requiredKeys = [
         "Constituency",
-        "District",
         "EPA",
         "FO_Type",
         "Farmer_Organization",

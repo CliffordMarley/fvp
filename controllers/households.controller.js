@@ -168,12 +168,20 @@ module.exports = class HouseholdsController{
                 delete requestBody._id
                 await this.logger.Insert(requestBody)
             }catch(err){
-                console.log("%s : Failed to log post request: %s",moment().utc().format(), err.message)
+                console.log("%s : Failed to log post request: %s", moment().utc().format(), err.message)
             }
-            console.log("%s : Updating household for Farmer %s",moment().utc().format(), nationalId)
+            console.log("%s : Updating household for Farmer %s", moment().utc().format(), nationalId)
             //validateHouseholdKeys(farmerProfile)
             if(true){
+                
                 farmerProfile = CastData(farmerProfile)
+
+                if(farmerProfile.Land_Ownership_Type.includes(['OWNED', 'OWNED AND RENTED', 'RENTED' ]) && (!Isset(farmerProfile.Total_Arable_Land_Size) || !Isset(farmerProfile.Total_Arable_Land_Used))){
+                    res.status(400).json({message:"Please provide land access information!"})
+                    return
+                }
+
+
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 const updatedHouseholdsCount = await this.household.CountDocuments({
                     "Updated_By":req.username
