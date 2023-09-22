@@ -71,6 +71,8 @@ let CastData = data=>{
     data.In_Fisheries_Farming = Boolean(data.In_Fisheries_Farming)
     data.In_Livestock_Farming = Boolean(data.In_Livestock_Farming)
     data.In_Poutry_Farming = Boolean(data.In_Poutry_Farming)
+    data.Total_Arable_Land_Size = Isset(data.Total_Arable_Land_Size) ? parseFloat(data.Total_Arable_Land_Size) : null
+    data.Total_Arable_Lasnd_Used = Isset(data.Total_Arable_Lasnd_Used) ? parseFloat(data.Total_Arable_Lasnd_Used) : null
 
     data = capitalizeNonEmptyStrings(data)
 

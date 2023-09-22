@@ -6,6 +6,8 @@ const LoggerModel = require('../models/log.model')
 const TAModel = require('../models/ta.model')
 const EPAModel = require('../models/epa.model')
 const SectionModel = require("../models/section.model")
+
+const DistrictModel = require("../models/district.model")
 const RedisCache = require('../helpers/cache.helper')
 
 
@@ -28,6 +30,7 @@ module.exports = class HouseholdsController{
         this.identity = new IdentityModel()
         this.ta = new TAModel()
         this.section = new SectionModel()
+        this.district = new DistrictModel()
         this.epa = new EPAModel()
         this.logger = new LoggerModel()
         this.cache = new RedisCache()
@@ -176,10 +179,13 @@ module.exports = class HouseholdsController{
                 
                 farmerProfile = CastData(farmerProfile)
 
-                // if(farmerProfile.Land_Ownership_Type.includes(['OWNED', 'OWNED AND RENTED', 'RENTED' ]) && (!Isset(farmerProfile.Total_Arable_Land_Size) || !Isset(farmerProfile.Total_Arable_Land_Used))){
-                //     res.status(400).json({message:"Please provide land size information!"})
-                //     return
-                // }
+                if(farmerProfile.Land_Ownership_Type.includes(['OWNED', 'OWNED AND RENTED', 'RENTED' ]) && (!Isset(farmerProfile.Total_Arable_Land_Size) || !Isset(farmerProfile.Total_Arable_Land_Used))){
+                    res.status(400).json({message:"Please provide land size information!"})
+                    return
+                }
+
+                farmerProfile.District = await this.resolveDistrict(req.Section)
+                farmerProfile.Timestamp = moment().utc().format()
                 
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 const updatedHouseholdsCount = await this.household.CountDocuments({
@@ -208,8 +214,10 @@ module.exports = class HouseholdsController{
             let farmerProfileArray = req.body
 
             for(let household of farmerProfileArray){
-                if(validateHouseholdKeys(household)){
+                if(true){
                     household = CastData(household)    
+                    household.District = await this.resolveDistrict(req.Section)
+                    household.Timestamp = moment().utc().format()
                     this.household.updateByNationalID(household.National_ID, household)
                     .then(res=>console.log("%s : Households %s updated!",moment().utc().format(), household.National_ID))
                     .catch(err=>console.log("%s : Error: %s",moment().utc().format(),err.message))
@@ -283,12 +291,10 @@ module.exports = class HouseholdsController{
              try{
                  //Get section first
                  const Section = await this.section.Read({Section_Code})
-                 const epaFilter = {"EPACode":Section[0].EPA}
- 
-                 const EPA = await this.epa.Read(epaFilter)
-                 let District_Code = EPA[0].EPA_Name
-                 EPA_Name = EPA_Name.toUpperCase()
-                 resolve(EPA_Name)
+                 const EPA = await this.epa.Read({"EPACode":Section[0].EPA})
+                 const district = await this.district.Read({District_Code: EPA[0].District})
+                 const district_name = district[0].District_Name.toUpperCase()
+                 resolve(district_name)
              }catch(err){
                  console.log(err.message)
                  resolve(null)
