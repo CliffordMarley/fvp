@@ -175,11 +175,12 @@ module.exports = class HouseholdsController{
             }
             console.log("%s : Updating household for Farmer %s", moment().utc().format(), nationalId)
             //validateHouseholdKeys(farmerProfile)
+           
             if(true){
                 
                 farmerProfile = CastData(farmerProfile)
 
-                if(farmerProfile.Land_Ownership_Type.includes(['OWNED', 'OWNED AND RENTED', 'RENTED' ]) && (!Isset(farmerProfile.Total_Arable_Land_Size) || !Isset(farmerProfile.Total_Arable_Land_Used))){
+                if(['OWNED', 'OWNED AND RENTED', 'RENTED' ].includes(farmerProfile.Land_Ownership_Type) && (!Isset(farmerProfile.Total_Arable_Land_Size) || !Isset(farmerProfile.Total_Arable_Land_Used))){
                     res.status(400).json({message:"Please provide land size information!"})
                     return
                 }
