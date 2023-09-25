@@ -205,6 +205,8 @@ module.exports = class HouseholdsController{
             res.status(500).json({
                 message:err.message
             })
+        }finally{
+            this.fixDistrict()
         }
     }
 
