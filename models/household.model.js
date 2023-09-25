@@ -84,8 +84,12 @@ module.exports = class HouseholdModel {
         }
     }
 
-    fixDistrict = ()=>{
+    fixDistrict = async ()=>{
         try{
+            if (!this.collection) {
+                throw new Error('Collection not initialized. Call initialize() before using the model.');
+            }
+    
             const pipeline = [
                 {
                     $match: {
