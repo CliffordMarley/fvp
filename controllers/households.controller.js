@@ -206,7 +206,7 @@ module.exports = class HouseholdsController{
                 message:err.message
             })
         }finally{
-            this.fixDistrict()
+            this.household.fixDistrict()
         }
     }
 
