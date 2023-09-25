@@ -335,77 +335,78 @@ module.exports = class HouseholdsController{
             })
         }
      }
+
+     fixDistrict = ()=>{
+        try{
+            const pipeline = [
+                {
+                    $match: {
+                        $or: [
+                            { District: null },
+                            { District: "" }
+                        ],
+                        EPA: { $exists: true, $ne: "", $ne:null }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "epa",
+                        let: { householdEPA: { $toLower: "$EPA" } },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [
+                                            { $toLower: "$EPA_Name" },
+                                            "$$householdEPA"
+                                        ]
+                                    }
+                                }
+                            }
+                        ],
+                        as: "epa_info"
+                    }
+                },
+                {
+                    $unwind: "$epa_info"
+                },
+                {
+                    $lookup: {
+                        from: "district",
+                        localField: "epa_info.District",
+                        foreignField: "District_Code",
+                        as: "district_info"
+                    }
+                },
+                {
+                    $unwind: "$district_info"
+                },
+                {
+                    $set: {
+                        Village: "$district_info.District_Name",
+                        District: "$district_info.District_Name"
+                    }
+                },
+                {
+                    $project: {
+                        epa_info: 0,
+                        district_info: 0
+                    }
+                }
+            ];
+            
+            this.household.aggregate(pipeline).forEach(function (doc) {
+                this.household.update(
+                    { _id: doc._id },
+                    { $set: { District: doc.District.toUpperCase() } }
+                );
+            });
+            console.log("District fix complete!")
+        }catch(err){
+            console.log(err)
+        }
+    }
     
 
 }
 
-let fixDistrict = async ()=>{
-    try{
-        const pipeline = [
-            {
-                $match: {
-                    $or: [
-                        { District: null },
-                        { District: "" }
-                    ],
-                    EPA: { $exists: true, $ne: "", $ne:null }
-                }
-            },
-            {
-                $lookup: {
-                    from: "epa",
-                    let: { householdEPA: { $toLower: "$EPA" } },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: {
-                                    $eq: [
-                                        { $toLower: "$EPA_Name" },
-                                        "$$householdEPA"
-                                    ]
-                                }
-                            }
-                        }
-                    ],
-                    as: "epa_info"
-                }
-            },
-            {
-                $unwind: "$epa_info"
-            },
-            {
-                $lookup: {
-                    from: "district",
-                    localField: "epa_info.District",
-                    foreignField: "District_Code",
-                    as: "district_info"
-                }
-            },
-            {
-                $unwind: "$district_info"
-            },
-            {
-                $set: {
-                    Village: "$district_info.District_Name",
-                    District: "$district_info.District_Name"
-                }
-            },
-            {
-                $project: {
-                    epa_info: 0,
-                    district_info: 0
-                }
-            }
-        ];
-        
-        this.household.aggregate(pipeline).forEach(function (doc) {
-            this.household.update(
-                { _id: doc._id },
-                { $set: { District: doc.District.toUpperCase() } }
-            );
-        });
-        console.log("District fix complete!")
-    }catch(err){
-        console.log(err)
-    }
-}
