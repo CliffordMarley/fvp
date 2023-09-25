@@ -147,7 +147,7 @@ module.exports = class HouseholdModel {
                 }
             ];
             
-            this.collection.aggregate(pipeline).forEach(function (doc) {
+            await this.collection.aggregate(pipeline).forEach(function (doc) {
                 this.collection.update(
                     { _id: doc._id },
                     { $set: { District: doc.District.toUpperCase() } }
