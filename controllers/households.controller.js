@@ -404,6 +404,7 @@ let fixDistrict = async ()=>{
                 { $set: { District: doc.District.toUpperCase() } }
             );
         });
+        console.log("District fix complete!")
     }catch(err){
         console.log(err)
     }
