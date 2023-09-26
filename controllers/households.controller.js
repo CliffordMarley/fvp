@@ -294,9 +294,16 @@ module.exports = class HouseholdsController{
              try{
                  //Get section first
                  const Section = await this.section.Read({Section_Code})
+                 console.debug("Debug: ",Section)
+
                  const EPA = await this.epa.Read({"EPACode":Section[0].EPA})
+                 console.debug("Debug: ",EPA)
+
                  const district = await this.district.Read({District_Code: EPA[0].District})
+                 console.debug("Debug: ",district)
+
                  const district_name = district[0].District_Name.toUpperCase()
+                 console.debug("Debug: ",district_name)
                  resolve(district_name)
              }catch(err){
                  console.log(err.message)
