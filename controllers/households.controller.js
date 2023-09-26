@@ -185,7 +185,9 @@ module.exports = class HouseholdsController{
                     return
                 }
 
-                farmerProfile.District = await this.resolveDistrict(req.Section)
+               
+                const districtName = await this.resolveDistrict(req.Section)
+                districtName != null ?  farmerProfile.District = districtName : {}
                 farmerProfile.Timestamp = moment().utc().format()
                 
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
@@ -219,7 +221,8 @@ module.exports = class HouseholdsController{
             for(let household of farmerProfileArray){
                 if(true){
                     household = CastData(household)    
-                    household.District = await this.resolveDistrict(req.Section)
+                    const districtName = await this.resolveDistrict(req.Section)
+                    districtName != null ?  household.District = districtName : {}
                     household.Timestamp = moment().utc().format()
                     this.household.updateByNationalID(household.National_ID, household)
                     .then(res=>console.log("%s : Households %s updated!",moment().utc().format(), household.National_ID))
@@ -294,16 +297,16 @@ module.exports = class HouseholdsController{
              try{
                  //Get section first
                  const Section = await this.section.Read({Section_Code})
-                 console.debug("Debug: ",Section)
+                 //console.debug("Debug: ",Section)
 
                  const EPA = await this.epa.Read({"EPACode":Section[0].EPA})
-                 console.debug("Debug: ",EPA)
+                 //console.debug("Debug: ",EPA)
 
                  const district = await this.district.Read({District_Code: EPA[0].District})
-                 console.debug("Debug: ",district)
+                 //console.debug("Debug: ",district)
 
                  const district_name = district[0].District_Name.toUpperCase()
-                 console.debug("Debug: ",district_name)
+                 //console.debug("Debug: ",district_name)
                  resolve(district_name)
              }catch(err){
                  console.log(err.message)
