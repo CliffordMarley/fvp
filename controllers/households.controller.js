@@ -238,7 +238,7 @@ module.exports = class HouseholdsController{
 
                     household.Timestamp = moment().utc().format()
                     
-                    if(household.Section && household.Section != typeof undefined && && household.Section != ""){
+                    if(household.Section && household.Section != typeof undefined && household.Section != ""){
                         household.Section = household.Section.trim()
                     }
                     const lastChar = household.Section.slice(-1); 
