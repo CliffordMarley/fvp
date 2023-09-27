@@ -192,7 +192,7 @@ module.exports = class HouseholdsController{
                 farmerProfile.Section = farmerProfile.Section.trim()
 
                 const lastChar = farmerProfile.Section.slice(-1); 
-                if(!isNaN(lastChar)){{
+                if(!isNaN(lastChar)){
                     farmerProfile.Section = farmerProfile.Section.slice(0, -1) + ' ' + lastChar
                 }
                 
