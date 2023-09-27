@@ -190,7 +190,7 @@ module.exports = class HouseholdsController{
                 districtName != null ?  farmerProfile.District = districtName : {}
                 farmerProfile.Timestamp = moment().utc().format()
                 
-                if(farmerProfile.Section && farmerProfile.Section != typeof undefined){
+                if(farmerProfile.Section && farmerProfile.Section != typeof undefined && farmerProfile.Section != ""){
                     farmerProfile.Section = farmerProfile.Section.trim()
                 }
 
@@ -238,7 +238,7 @@ module.exports = class HouseholdsController{
 
                     household.Timestamp = moment().utc().format()
                     
-                    if(household.Section && household.Section != typeof undefined){
+                    if(household.Section && household.Section != typeof undefined && && household.Section != ""){
                         household.Section = household.Section.trim()
                     }
                     const lastChar = household.Section.slice(-1); 
