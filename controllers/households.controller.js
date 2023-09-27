@@ -189,6 +189,7 @@ module.exports = class HouseholdsController{
                 const districtName = await this.resolveDistrict(req.Section)
                 districtName != null ?  farmerProfile.District = districtName : {}
                 farmerProfile.Timestamp = moment().utc().format()
+                farmerProfile.Section = farmerProfile.Section.trim()
                 
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 const updatedHouseholdsCount = await this.household.CountDocuments({
@@ -223,7 +224,10 @@ module.exports = class HouseholdsController{
                     household = CastData(household)    
                     const districtName = await this.resolveDistrict(req.Section)
                     districtName != null ?  household.District = districtName : {}
+
                     household.Timestamp = moment().utc().format()
+                    household.Section = household.Section.trim()
+
                     this.household.updateByNationalID(household.National_ID, household)
                     .then(res=>console.log("%s : Households %s updated!",moment().utc().format(), household.National_ID))
                     .catch(err=>console.log("%s : Error: %s",moment().utc().format(),err.message))
