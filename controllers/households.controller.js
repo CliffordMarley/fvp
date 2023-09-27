@@ -190,6 +190,9 @@ module.exports = class HouseholdsController{
                 districtName != null ?  farmerProfile.District = districtName : {}
                 farmerProfile.Timestamp = moment().utc().format()
                 farmerProfile.Section = farmerProfile.Section.trim()
+
+                const lastChar = farmerProfile.Section.slice(-1); 
+                farmerProfile.Section = farmerProfile.Section.slice(0, -1) + ' ' + lastChar
                 
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 const updatedHouseholdsCount = await this.household.CountDocuments({
