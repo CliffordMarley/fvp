@@ -190,16 +190,16 @@ module.exports = class HouseholdsController{
                 districtName != null ?  farmerProfile.District = districtName : {}
                 farmerProfile.Timestamp = moment().utc().format()
                 
-                if(farmerProfile.Section && farmerProfile.Section != typeof undefined && farmerProfile.Section != ""){
-                    farmerProfile.Section = farmerProfile.Section.trim()
-                }
+                // if(farmerProfile.Section && farmerProfile.Section != typeof undefined && farmerProfile.Section != "" && farmerProfile.Section != null){
+                //     farmerProfile.Section = farmerProfile.Section.trim()
+                // }
 
                 
 
-                const lastChar = farmerProfile.Section.slice(-1); 
-                if(!isNaN(lastChar)){
-                    farmerProfile.Section = farmerProfile.Section.slice(0, -1) + ' ' + lastChar
-                }
+                // const lastChar = farmerProfile.Section.slice(-1); 
+                // if(!isNaN(lastChar)){
+                //     farmerProfile.Section = farmerProfile.Section.slice(0, -1) + ' ' + lastChar
+                // }
                 
                 
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
@@ -238,14 +238,14 @@ module.exports = class HouseholdsController{
 
                     household.Timestamp = moment().utc().format()
                     
-                    if(household.Section && household.Section != typeof undefined && household.Section != ""){
-                        household.Section = household.Section.trim()
-                    }
-                    const lastChar = household.Section.slice(-1); 
+                    // if(household.Section && household.Section != typeof undefined && household.Section != ""){
+                    //     household.Section = household.Section.trim()
+                    // }
+                    // const lastChar = household.Section.slice(-1); 
 
-                    if(!isNaN(lastChar)){
-                        household.Section = household.Section.slice(0, -1) + ' ' + lastChar
-                    }
+                    // if(!isNaN(lastChar)){
+                    //     household.Section = household.Section.slice(0, -1) + ' ' + lastChar
+                    // }
                     
 
                     this.household.updateByNationalID(household.National_ID, household)
