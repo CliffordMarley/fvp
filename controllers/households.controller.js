@@ -227,6 +227,8 @@ module.exports = class HouseholdsController{
 
                     household.Timestamp = moment().utc().format()
                     household.Section = household.Section.trim()
+                    const lastChar = household.Section.slice(-1); 
+                    household.Section = household.Section.slice(0, -1) + ' ' + lastChar
 
                     this.household.updateByNationalID(household.National_ID, household)
                     .then(res=>console.log("%s : Households %s updated!",moment().utc().format(), household.National_ID))
