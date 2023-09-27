@@ -192,7 +192,10 @@ module.exports = class HouseholdsController{
                 farmerProfile.Section = farmerProfile.Section.trim()
 
                 const lastChar = farmerProfile.Section.slice(-1); 
-                farmerProfile.Section = farmerProfile.Section.slice(0, -1) + ' ' + lastChar
+                if(!isNaN(lastChar)){{
+                    farmerProfile.Section = farmerProfile.Section.slice(0, -1) + ' ' + lastChar
+                }
+                
                 
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
                 const updatedHouseholdsCount = await this.household.CountDocuments({
@@ -221,7 +224,7 @@ module.exports = class HouseholdsController{
         try{
             console.log('Batch insert of %s already updated households', req.body.length )
             let farmerProfileArray = req.body
-
+            
             for(let household of farmerProfileArray){
                 if(true){
                     household = CastData(household)    
@@ -231,7 +234,11 @@ module.exports = class HouseholdsController{
                     household.Timestamp = moment().utc().format()
                     household.Section = household.Section.trim()
                     const lastChar = household.Section.slice(-1); 
-                    household.Section = household.Section.slice(0, -1) + ' ' + lastChar
+
+                    if(!isNaN(lastChar)){
+                        household.Section = household.Section.slice(0, -1) + ' ' + lastChar
+                    }
+                    
 
                     this.household.updateByNationalID(household.National_ID, household)
                     .then(res=>console.log("%s : Households %s updated!",moment().utc().format(), household.National_ID))
@@ -248,6 +255,7 @@ module.exports = class HouseholdsController{
                 updatedHouseholdsCount
             })          
         }catch(err){
+            console.log(req.body)
             console.log(err)
             this.event.Log(req.username, this.actions[4])
             res.status(500).json({
