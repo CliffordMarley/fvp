@@ -189,7 +189,10 @@ module.exports = class HouseholdsController{
                 const districtName = await this.resolveDistrict(req.Section)
                 districtName != null ?  farmerProfile.District = districtName : {}
                 farmerProfile.Timestamp = moment().utc().format()
-                farmerProfile.Section = farmerProfile.Section.trim()
+                
+                if(farmerProfile.Section && farmerProfile.Section != typeof undefined){
+                    farmerProfile.Section = farmerProfile.Section.trim()
+                }
 
                 const lastChar = farmerProfile.Section.slice(-1); 
                 if(!isNaN(lastChar)){
@@ -232,7 +235,10 @@ module.exports = class HouseholdsController{
                     districtName != null ?  household.District = districtName : {}
 
                     household.Timestamp = moment().utc().format()
-                    household.Section = household.Section.trim()
+                    
+                    if(household.Section && household.Section != typeof undefined){
+                        household.Section = household.Section.trim()
+                    }
                     const lastChar = household.Section.slice(-1); 
 
                     if(!isNaN(lastChar)){
