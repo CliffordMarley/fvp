@@ -57,12 +57,18 @@ module.exports = class {
                     let otherSections = []
                     gazetted_villages.map(record=>{
                         if(!otherSections.includes(record.Section)){
-                            otherSections.push(record.Section)
+                            otherSections.push(record.Section.toUpperCase())
                         }   
                     })
 
                     if(otherSections.length == 0){
-                        otherSections = await this.section.Read({EPA:EPAs.EPACode})
+                        const secondarySectionList = await this.section.Read({EPA:EPAs.EPACode})
+
+                        secondarySectionList.map(record=>{
+                            if(!otherSections.includes(record.Section)){
+                                otherSections.push(record.Section_Name.toUpperCase())
+                            }   
+                        })
                     }
 
                     let District = await this.district.Read({District_Code: EPAs.District})
