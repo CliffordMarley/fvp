@@ -54,12 +54,16 @@ module.exports = class {
                     EPAs = EPAs[0]
 
                     let gazetted_villages = await this.gazetted_villages.Read({EPA: EPAs.EPA_Name.toUpperCase()})
-                    const sectionList = []
+                    let otherSections = []
                     gazetted_villages.map(record=>{
-                        if(!sectionList.includes(record.Section)){
-                            sectionList.push(record.Section)
+                        if(!otherSections.includes(record.Section)){
+                            otherSections.push(record.Section)
                         }   
                     })
+
+                    if(otherSections.length == 0){
+                        otherSections = await this.section.Read({EPA:EPAs.EPACode})
+                    }
 
                     let District = await this.district.Read({District_Code: EPAs.District})
                     District = District[0]
@@ -90,7 +94,7 @@ module.exports = class {
                         "epa":EPAs,
                         "district":District,
                         "section": Section,
-                        "sectionList": sectionList,
+                        "otherSections": otherSections,
                         "villages": villages,
                         "constituency": Constituencies
                     }
