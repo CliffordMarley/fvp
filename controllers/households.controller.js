@@ -32,7 +32,8 @@ module.exports = class HouseholdsController{
         this.section = new SectionModel()
         this.district = new DistrictModel()
         this.epa = new EPAModel()
-        this.logger = new LoggerModel()
+        
+        this.postLogger = new LoggerModel()
         this.cache = new RedisCache()
 
     }
@@ -169,7 +170,7 @@ module.exports = class HouseholdsController{
             try{
                 let requestBody = req.body
                 delete requestBody._id
-                await this.logger.Insert(requestBody)
+                await this.postLogger.Insert(requestBody)
             }catch(err){
                 console.log("%s : Failed to log post request: %s", moment().utc().format(), err.message)
             }
@@ -189,17 +190,6 @@ module.exports = class HouseholdsController{
                 const districtName = await this.resolveDistrict(req.Section)
                 districtName != null ?  farmerProfile.District = districtName : {}
                 farmerProfile.Timestamp = moment().utc().format()
-                
-                // if(farmerProfile.Section && farmerProfile.Section != typeof undefined && farmerProfile.Section != "" && farmerProfile.Section != null){
-                //     farmerProfile.Section = farmerProfile.Section.trim()
-                // }
-
-                
-
-                // const lastChar = farmerProfile.Section.slice(-1); 
-                // if(!isNaN(lastChar)){
-                //     farmerProfile.Section = farmerProfile.Section.slice(0, -1) + ' ' + lastChar
-                // }
                 
                 
                 await this.household.updateByNationalID(farmerProfile.National_ID, farmerProfile)
@@ -236,17 +226,7 @@ module.exports = class HouseholdsController{
                     const districtName = await this.resolveDistrict(req.Section)
                     districtName != null ?  household.District = districtName : {}
 
-                    household.Timestamp = moment().utc().format()
-                    
-                    // if(household.Section && household.Section != typeof undefined && household.Section != ""){
-                    //     household.Section = household.Section.trim()
-                    // }
-                    // const lastChar = household.Section.slice(-1); 
-
-                    // if(!isNaN(lastChar)){
-                    //     household.Section = household.Section.slice(0, -1) + ' ' + lastChar
-                    // }
-                    
+                    household.Timestamp = moment().utc().format()                    
 
                     this.household.updateByNationalID(household.National_ID, household)
                     .then(res=>console.log("%s : Households %s updated!",moment().utc().format(), household.National_ID))

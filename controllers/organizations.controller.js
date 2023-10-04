@@ -4,6 +4,8 @@ const EPAModel = require('../models/epa.model')
 const VillageModel = require("../models/village.model")
 const DistrictModel = require("../models/district.model")
 const ConstituencyModel = require("../models/constituency.model")
+const GezettedVillageModel = require("../models/gazetted_village.model")
+
 const RedisCache = require('../helpers/cache.helper')
 
 const moment = require('moment')
@@ -24,6 +26,8 @@ module.exports = class {
         this.village = new VillageModel()
         this.district = new DistrictModel()
         this.constituency = new ConstituencyModel()
+        this.gazetted_villages = new GezettedVillageModel()
+
         this.cache = new RedisCache()
     }
 
@@ -35,8 +39,6 @@ module.exports = class {
             //Find section
             const  memoryKey = filter.Section_Code
 
-            console.log("Cache key: ", memoryKey)
-
             let organizationUnit = null
 
 
@@ -47,10 +49,17 @@ module.exports = class {
                 if(sections && sections.length > 0){
                     let Section = sections[0]
 
-                    let otherSections = await this.section.Read({EPA: Section.EPA})
 
                     let EPAs = await this.epa.Read({EPACode:Section.EPA})
                     EPAs = EPAs[0]
+
+                    let gazetted_villages = await this.gazetted_villages.Read({EPA: EPAs.EPA_Name.toUpperCase()})
+                    const otherSections = []
+                    gazetted_villages.map(record=>{
+                        if(!otherSections.includes(record.Section)){
+                            otherSections.push(record.Section)
+                        }   
+                    })
 
                     let District = await this.district.Read({District_Code: EPAs.District})
                     District = District[0]
