@@ -61,15 +61,13 @@ module.exports = class {
                         }   
                     })
 
-                    if(otherSections.length == 0){
-                        const secondarySectionList = await this.section.Read({EPA:EPAs.EPACode})
+                    const secondarySectionList = await this.section.Read({EPA:EPAs.EPACode})
 
-                        secondarySectionList.map(record=>{
-                            if(!otherSections.includes(record.Section)){
-                                otherSections.push(record.Section_Name.toUpperCase())
-                            }   
-                        })
-                    }
+                    secondarySectionList.map(record=>{
+                        if(!otherSections.includes(record.Section)){
+                            otherSections.push(record.Section_Name.toUpperCase())
+                        }   
+                    })
 
                     let District = await this.district.Read({District_Code: EPAs.District})
                     District = District[0]
