@@ -66,17 +66,29 @@ function validateHouseholdKeys(data) {
     
 }
 
+function hasValue(variable) {
+    return variable !== null && variable !== undefined && variable !== '';
+}
+
 let CastData = data=>{
     data.Fit_For_Work = Boolean(data.Fit_For_Work)
     data.In_Fisheries_Farming = Boolean(data.In_Fisheries_Farming)
     data.In_Livestock_Farming = Boolean(data.In_Livestock_Farming)
     data.In_Poutry_Farming = Boolean(data.In_Poutry_Farming)
-    data.Total_Arable_Land_Size = Isset(data.Total_Arable_Land_Size) ? parseFloat(data.Total_Arable_Land_Size) : null
-    data.Total_Arable_Land_Used = Isset(data.Total_Arable_Land_Used) ? parseFloat(data.Total_Arable_Land_Used) : null
+    data.Total_Arable_Land_Size = smartSave(data.Total_Arable_Land_Size)
+    data.Total_Arable_Land_Used = smartSave(data.Total_Arable_Land_Used)
 
     data = capitalizeNonEmptyStrings(data)
 
     return data
+}
+
+smartParse = value=>{
+    try{
+        return parseFloat(value)
+    }catch{
+        return value
+    }
 }
 
 let isNonEmptyNonNumericString = (value)=>{

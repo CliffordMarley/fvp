@@ -221,6 +221,13 @@ module.exports = class HouseholdsController{
             let farmerProfileArray = req.body
             
             for(let household of farmerProfileArray){
+                try{
+                    let requestBody = req.body
+                    delete requestBody._id
+                    await this.postLogger.Insert(requestBody)
+                }catch(err){
+                    console.log("%s : Failed to log post request: %s", moment().utc().format(), err.message)
+                }
                 if(true){
                     household = CastData(household)    
                     const districtName = await this.resolveDistrict(req.Section)
