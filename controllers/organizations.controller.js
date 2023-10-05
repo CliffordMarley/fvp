@@ -12,6 +12,7 @@ const moment = require('moment')
 
 
 const {setCache, getCache, Hash} = require('../helpers/cache.helper')
+const {Isset} = require('../helpers/validation.helpers')
 
 const Event = require('../models/event.model')
 
@@ -56,7 +57,7 @@ module.exports = class {
                     let gazetted_villages = await this.gazetted_villages.Read({EPA: EPAs.EPA_Name.toUpperCase()})
                     let otherSections = []
                     gazetted_villages.map(record=>{
-                        if(!otherSections.includes(record.Section)){
+                        if(!otherSections.includes(record.Section) && Isset(record.Section)){
                             otherSections.push(record.Section.toUpperCase())
                         }   
                     })
@@ -64,7 +65,7 @@ module.exports = class {
                     const secondarySectionList = await this.section.Read({EPA:EPAs.EPACode})
 
                     secondarySectionList.map(record=>{
-                        if(!otherSections.includes(record.Section)){
+                        if(!otherSections.includes(record.Section) && Isset(record.Section)){
                             otherSections.push(record.Section_Name.toUpperCase())
                         }   
                     })
