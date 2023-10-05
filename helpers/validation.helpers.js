@@ -66,10 +66,6 @@ function validateHouseholdKeys(data) {
     
 }
 
-function hasValue(variable) {
-    return variable !== null && variable !== undefined && variable !== '';
-}
-
 let CastData = data=>{
     data.Fit_For_Work = Boolean(data.Fit_For_Work)
     data.In_Fisheries_Farming = Boolean(data.In_Fisheries_Farming)
