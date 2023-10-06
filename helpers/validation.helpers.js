@@ -71,8 +71,8 @@ let CastData = data=>{
     data.In_Fisheries_Farming = Boolean(data.In_Fisheries_Farming)
     data.In_Livestock_Farming = Boolean(data.In_Livestock_Farming)
     data.In_Poutry_Farming = Boolean(data.In_Poutry_Farming)
-    data.Total_Arable_Land_Size = smartSave(data.Total_Arable_Land_Size)
-    data.Total_Arable_Land_Used = smartSave(data.Total_Arable_Land_Used)
+    data.Total_Arable_Land_Size = smartParse(data.Total_Arable_Land_Size)
+    data.Total_Arable_Land_Used = smartParse(data.Total_Arable_Land_Used)
 
     data = capitalizeNonEmptyStrings(data)
 
