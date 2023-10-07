@@ -5,7 +5,7 @@ const VillageModel = require("../models/village.model")
 const DistrictModel = require("../models/district.model")
 const ConstituencyModel = require("../models/constituency.model")
 const GezettedVillageModel = require("../models/gazetted_village.model")
-const HouseholdModels = require("../models/household.model")
+const HouseholdModel = require("../models/household.model")
 
 const RedisCache = require('../helpers/cache.helper')
 
@@ -29,7 +29,7 @@ module.exports = class {
         this.district = new DistrictModel()
         this.constituency = new ConstituencyModel()
         this.gazetted_villages = new GezettedVillageModel()
-        this.household = new HouseholdModels()
+        this.household = new HouseholdModel()
 
         this.cache = new RedisCache()
     }
@@ -72,7 +72,7 @@ module.exports = class {
                     //     }   
                     // })
 
-                    otherSections = await this.household.distinct("Section", {Updated_By: req.username, Section:{$ne:null, $ne:""}})
+                    otherSections = await this.household.DistinctSection({Updated_By: req.username, Section:{$ne:null, $ne:""}})
 
                     let District = await this.distinct.Read({District_Code: EPAs.District})
                     District = District[0]

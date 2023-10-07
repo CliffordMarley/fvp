@@ -35,6 +35,17 @@ module.exports = class HouseholdModel {
             throw err;
         }
     }
+    async DistinctSection(filter = null) {
+        try {
+            if (!this.collection) {
+                throw new Error('Collection not initialized. Call initialize() before using the model.');
+            }
+            const documents = await this.collection.distinct("Section",filter);//.toArray();
+            return documents;
+        } catch (err) {
+            throw err;
+        }
+    }
 
 
 
@@ -159,6 +170,7 @@ module.exports = class HouseholdModel {
         }
     }
     
+
 
 
 }
