@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 const express = require('express')
 const compression = require('compression')
 const {configureAppRoutes} = require('./config/routes.config')
-global.appVersion = 8.0
+global.appVersion = 9.0
 let app = express()
 
 //Setup Middleware

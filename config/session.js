@@ -34,6 +34,10 @@ const restAuth = (req, res, next)=>{
                 console.log("Request from %s was rejected!", req.username)
                 return
             }
+            if(!req.headers.version || req.headers.version == typeof undefined || req.headers.version < global.appVersion){
+                res.status(401).json({message:"Request failed. Please upgrade to app version "+global.appVersion})
+                return
+            }
             next()
         }        
 
