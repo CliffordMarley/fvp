@@ -43,6 +43,7 @@ module.exports = class HouseholdModel {
             const documents = await this.collection.distinct("Section",filter);//.toArray();
             return documents;
         } catch (err) {
+            console.log(err)
             throw err;
         }
     }
