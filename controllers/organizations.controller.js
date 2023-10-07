@@ -74,7 +74,7 @@ module.exports = class {
 
                     otherSections = await this.household.district("Section", {Updated_By: req.username, Section:{$ne:null, $ne:""}})
 
-                    let District = await this.district.Read({District_Code: EPAs.District})
+                    let District = await this.distinct.Read({District_Code: EPAs.District})
                     District = District[0]
 
                     let District_Name = District.District_Name.split(' ')
