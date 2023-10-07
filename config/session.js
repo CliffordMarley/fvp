@@ -31,6 +31,7 @@ const restAuth = (req, res, next)=>{
         }else{
             if(req.username != 994791131){
                 res.status(403).json({message:"System is undergoing maintenance!"})
+                console.log("Request from %s was rejected!", req.username)
                 return
             }
             next()
