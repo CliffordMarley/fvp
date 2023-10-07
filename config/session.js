@@ -29,7 +29,7 @@ const restAuth = (req, res, next)=>{
         if(!decoded){
             res.status(401).json({message:"Unauthorized!"})
         }else{
-            if(req.username != 994791131 && req.username != 999301498){
+            if(req.username != 994791131 && req.username != 999301498 && req.username != 993604046){
                 res.status(403).json({message:"System is undergoing maintenance!"})
                 console.log("Request from %s was rejected!", req.username)
                 return
