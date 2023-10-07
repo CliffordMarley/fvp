@@ -5,6 +5,7 @@ const VillageModel = require("../models/village.model")
 const DistrictModel = require("../models/district.model")
 const ConstituencyModel = require("../models/constituency.model")
 const GezettedVillageModel = require("../models/gazetted_village.model")
+const HouseholdModels = require("../models/household.model")
 
 const RedisCache = require('../helpers/cache.helper')
 
@@ -28,6 +29,7 @@ module.exports = class {
         this.district = new DistrictModel()
         this.constituency = new ConstituencyModel()
         this.gazetted_villages = new GezettedVillageModel()
+        this.household = new HouseholdModels()
 
         this.cache = new RedisCache()
     }
@@ -56,19 +58,21 @@ module.exports = class {
 
                     let gazetted_villages = await this.gazetted_villages.Read({EPA: EPAs.EPA_Name.toUpperCase()})
                     let otherSections = []
-                    gazetted_villages.map(record=>{
-                        if(!otherSections.includes(record.Section) && Isset(record.Section)){
-                            otherSections.push(record.Section.toUpperCase())
-                        }   
-                    })
+                    // gazetted_villages.map(record=>{
+                    //     if(!otherSections.includes(record.Section) && Isset(record.Section)){
+                    //         otherSections.push(record.Section.toUpperCase())
+                    //     }   
+                    // })
 
-                    const secondarySectionList = await this.section.Read({EPA:EPAs.EPACode})
+                    // const secondarySectionList = await this.section.Read({EPA:EPAs.EPACode})
 
-                    secondarySectionList.map(record=>{
-                        if(!otherSections.includes(record.Section) && Isset(record.Section)){
-                            otherSections.push(record.Section_Name.toUpperCase())
-                        }   
-                    })
+                    // secondarySectionList.map(record=>{
+                    //     if(!otherSections.includes(record.Section) && Isset(record.Section)){
+                    //         otherSections.push(record.Section_Name.toUpperCase())
+                    //     }   
+                    // })
+
+                    otherSections = await this.household.district("Section", {Updated_By: req.username, Section:{$ne:null, $ne:""}})
 
                     let District = await this.district.Read({District_Code: EPAs.District})
                     District = District[0]
