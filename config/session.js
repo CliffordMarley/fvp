@@ -19,6 +19,7 @@ const restAuth = (req, res, next)=>{
             try{
                 req.username = decoded.data.Phone_Number    
                 req.Section = decoded.data.Section
+                
             }catch(err){
                 console.log(err.message)
                 res.status(401).json({message:"Unauthorized!"})
@@ -28,6 +29,10 @@ const restAuth = (req, res, next)=>{
         if(!decoded){
             res.status(401).json({message:"Unauthorized!"})
         }else{
+            if(req.username != 994791131){
+                res.status(403).json({message:"System is undergoing maintenance!"})
+                return
+            }
             next()
         }        
 
