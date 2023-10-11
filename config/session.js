@@ -29,15 +29,15 @@ const restAuth = (req, res, next)=>{
         if(!decoded){
             res.status(401).json({message:"Unauthorized!"})
         }else{
-            if(req.username != 994791131 && req.username != 999301498 && req.username != 993604046){
-                res.status(403).json({message:"System is undergoing maintenance!"})
-                console.log("Request from %s was rejected!", req.username)
-                return
-            }
-            if(!req.headers.version || req.headers.version == typeof undefined || req.headers.version < global.appVersion){
-                res.status(401).json({message:"Request failed. Please upgrade to app version "+global.appVersion})
-                return
-            }
+            // if(req.username != 994791131 && req.username != 999301498 && req.username != 993604046){
+            //     res.status(403).json({message:"System is undergoing maintenance!"})
+            //     console.log("Request from %s was rejected!", req.username)
+            //     return
+            // }
+            // if(!req.headers.version || req.headers.version == typeof undefined || req.headers.version < global.appVersion){
+            //     res.status(401).json({message:"Request failed. Please upgrade to app version "+global.appVersion})
+            //     return
+            // }
             next()
         }        
 
