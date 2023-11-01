@@ -143,11 +143,13 @@ module.exports = class {
             let Section = sections[0]
 
 
-            let EPAs = await this.epa.ReadAll({EPACode:Section.EPA})
+            let EPAs = await this.epa.Read({EPACode:Section.EPA})
             EPAs = EPAs[0]
             
             console.log("Searching for org structure from EPA: ", EPAs.EPA_Name.toUpperCase())
             let list = await this.org.Read({EPA: EPAs.EPA_Name.toUpperCase()})
+
+            console.log("Found %s records", list.length)
 
 
             const TAList = []
