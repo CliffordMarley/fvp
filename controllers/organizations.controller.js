@@ -163,6 +163,7 @@ module.exports = class {
                 section:Section,
                 ta: TAList,
                 villages:list,
+                constituency: [],
                 district: list[0].District
             })
         }catch(err){
