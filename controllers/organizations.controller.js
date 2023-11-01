@@ -149,9 +149,21 @@ module.exports = class {
             
             console.log("Searching for org structure from EPA: ", EPAs.EPA_Name.toUpperCase())
             let list = await this.org.ReadAll()
+
+
+            const TAList = []
+
+            list.map(item=>{
+                !TAList.includes(item.TA) ? TAList.push(item.TA) : {}
+            })
+
+
             res.json({
                 message:`${list.length} items found!`,
-                data:list
+                epas:EPAs,
+                section:Section,
+                ta: TAList,
+                villages:list
             })
         }catch(err){
             console.log(err)
