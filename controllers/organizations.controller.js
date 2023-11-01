@@ -159,11 +159,11 @@ module.exports = class {
 
 
             res.json({
-                message:`${list.length} items found!`,
-                epas:EPAs,
+                epa:EPAs,
                 section:Section,
                 ta: TAList,
-                villages:list
+                villages:list,
+                district: list[0].District
             })
         }catch(err){
             console.log(err)
