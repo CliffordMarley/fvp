@@ -147,7 +147,7 @@ module.exports = class {
             EPAs = EPAs[0]
             
             console.log("Searching for org structure from EPA: ", EPAs.EPA_Name.toUpperCase())
-            let list = await this.org.ReadAll()
+            let list = await this.org.Read({EPA: EPAs.EPA_Name.toUpperCase()})
 
 
             const TAList = []
@@ -161,6 +161,7 @@ module.exports = class {
                 !otherSections.includes(item.Section) ? otherSections.push(item.Section) : {}
             })
 
+            
 
             res.json({
                 epa:EPAs,
@@ -169,7 +170,7 @@ module.exports = class {
                 ta: TAList,
                 villages:list,
                 constituency: [],
-                district: list[0].District
+                district: {District_Name: list[0].District}
             })
         }catch(err){
             console.log(err)
