@@ -7,6 +7,11 @@ const ConstituencyModel = require("../models/constituency.model")
 const GezettedVillageModel = require("../models/gazetted_village.model")
 const HouseholdModel = require("../models/household.model")
 
+const assert = require('assert');
+
+const OrgModel = require("../models/org.model")
+
+
 const RedisCache = require('../helpers/cache.helper')
 
 const moment = require('moment')
@@ -30,96 +35,124 @@ module.exports = class {
         this.constituency = new ConstituencyModel()
         this.gazetted_villages = new GezettedVillageModel()
         this.household = new HouseholdModel()
+        this.org = new OrgModel()
 
         this.cache = new RedisCache()
     }
 
+    // Read = async (req, res)=>{
+    //     try{
+    //         console.log("%s : Reading organizational structure...", moment().utc().format())
+    //         const filter = req.params
+            
+    //         //Find section
+    //         const  memoryKey = filter.Section_Code
+
+    //         let organizationUnit = null
+
+
+    //         organizationUnit = await this.cache.getCache(memoryKey)
+
+    //         if(!organizationUnit || organizationUnit == null){
+    //             const sections = await this.section.Read(filter)
+    //             if(sections && sections.length > 0){
+    //                 let Section = sections[0]
+
+
+    //                 let EPAs = await this.epa.Read({EPACode:Section.EPA})
+    //                 EPAs = EPAs[0]
+
+    //                 let gazetted_villages = await this.gazetted_villages.Read({EPA: EPAs.EPA_Name.toUpperCase()})
+    //                 let otherSections = []
+    //                 // gazetted_villages.map(record=>{
+    //                 //     if(!otherSections.includes(record.Section) && Isset(record.Section)){
+    //                 //         otherSections.push(record.Section.toUpperCase())
+    //                 //     }   
+    //                 // })
+
+    //                 // const secondarySectionList = await this.section.Read({EPA:EPAs.EPACode})
+
+    //                 // secondarySectionList.map(record=>{
+    //                 //     if(!otherSections.includes(record.Section) && Isset(record.Section)){
+    //                 //         otherSections.push(record.Section_Name.toUpperCase())
+    //                 //     }   
+    //                 // })
+
+    //                 otherSections = await this.household.DistinctSection({Updated_By: req.username, Section:{$ne:null, $ne:""}})
+
+    //                 let District = await this.district.Read({District_Code: EPAs.District})
+    //                 District = District[0]
+
+    //                 let District_Name = District.District_Name.split(' ')
+                
+    //                 District_Name= District_Name[0].toUpperCase()
+    //                 let Constituencies = await this.constituency.Read({DISTRICT:District_Name})
+
+    //                 let TAs = await this.ta.Read({District:EPAs.District})
+
+    //                 let villages = []
+
+    //                 for(const ta of TAs){
+    //                     let villagesRead = await this.village.Read({TACode:ta.TACode})
+    //                     villages = villages.concat(villagesRead)
+    //                 }
+
+    //                 try{
+    //                     villages.sort((a, b) => a.Village_Name.localeCompare(b.Village_Name));
+    //                 }catch(err){
+    //                     console.log("%s : Error=> %s " , moment().utc().format(),err.message)
+    //                 }
+
+
+    //                 organizationUnit = {
+    //                     "ta":TAs,
+    //                     "epa":EPAs,
+    //                     "district":District,
+    //                     "section": Section,
+    //                     "otherSections": otherSections,
+    //                     "villages": villages,
+    //                     "constituency": Constituencies
+    //                 }
+
+    //                 res.json(organizationUnit)
+
+    //                 console.log("Storing organization unit in cache!")
+    //                 this.cache.setCache(memoryKey, organizationUnit)
+                    
+    //             }else{
+    //                 res.status(404).json({message:"Invalid Section Code!"})
+    //             }
+    //         }else{
+    //             console.log('%s : Read organization unit from cache!', moment().utc().format())
+    //             res.json(organizationUnit)
+    //         }
+    //     }catch(err){
+    //         console.log(err)
+    //         res.status(500).json({
+    //             message:err.message,
+    //             err
+    //         })
+    //     }
+    // }
     Read = async (req, res)=>{
         try{
-            console.log("%s : Reading organizational structure...", moment().utc().format())
+            console.log("%s : Reading Dowa structure...", moment().utc().format())
             const filter = req.params
+            const dowa_org_structure = []
+
+            const sections = await this.section.Read(filter)
+            let Section = sections[0]
+
+
+            let EPAs = await this.epa.ReadAll({EPACode:Section.EPA})
+            EPAs = EPAs[0]
             
-            //Find section
-            const  memoryKey = filter.Section_Code
-
-            let organizationUnit = null
-
-
-            organizationUnit = await this.cache.getCache(memoryKey)
-
-            if(!organizationUnit || organizationUnit == null){
-                const sections = await this.section.Read(filter)
-                if(sections && sections.length > 0){
-                    let Section = sections[0]
-
-
-                    let EPAs = await this.epa.Read({EPACode:Section.EPA})
-                    EPAs = EPAs[0]
-
-                    let gazetted_villages = await this.gazetted_villages.Read({EPA: EPAs.EPA_Name.toUpperCase()})
-                    let otherSections = []
-                    // gazetted_villages.map(record=>{
-                    //     if(!otherSections.includes(record.Section) && Isset(record.Section)){
-                    //         otherSections.push(record.Section.toUpperCase())
-                    //     }   
-                    // })
-
-                    // const secondarySectionList = await this.section.Read({EPA:EPAs.EPACode})
-
-                    // secondarySectionList.map(record=>{
-                    //     if(!otherSections.includes(record.Section) && Isset(record.Section)){
-                    //         otherSections.push(record.Section_Name.toUpperCase())
-                    //     }   
-                    // })
-
-                    otherSections = await this.household.DistinctSection({Updated_By: req.username, Section:{$ne:null, $ne:""}})
-
-                    let District = await this.district.Read({District_Code: EPAs.District})
-                    District = District[0]
-
-                    let District_Name = District.District_Name.split(' ')
-                
-                    District_Name= District_Name[0].toUpperCase()
-                    let Constituencies = await this.constituency.Read({DISTRICT:District_Name})
-
-                    let TAs = await this.ta.Read({District:EPAs.District})
-
-                    let villages = []
-
-                    for(const ta of TAs){
-                        let villagesRead = await this.village.Read({TACode:ta.TACode})
-                        villages = villages.concat(villagesRead)
-                    }
-
-                    try{
-                        villages.sort((a, b) => a.Village_Name.localeCompare(b.Village_Name));
-                    }catch(err){
-                        console.log("%s : Error=> %s " , moment().utc().format(),err.message)
-                    }
-
-
-                    organizationUnit = {
-                        "ta":TAs,
-                        "epa":EPAs,
-                        "district":District,
-                        "section": Section,
-                        "otherSections": otherSections,
-                        "villages": villages,
-                        "constituency": Constituencies
-                    }
-
-                    res.json(organizationUnit)
-
-                    console.log("Storing organization unit in cache!")
-                    this.cache.setCache(memoryKey, organizationUnit)
-                    
-                }else{
-                    res.status(404).json({message:"Invalid Section Code!"})
-                }
-            }else{
-                console.log('%s : Read organization unit from cache!', moment().utc().format())
-                res.json(organizationUnit)
-            }
+            console.log("Searching for org structure from EPA: ", EPAs.EPA_Name.toUpperCase())
+            let list = await this.org.ReadAll()
+            res.json({
+                message:`${list.length} items found!`,
+                data:list
+            })
         }catch(err){
             console.log(err)
             res.status(500).json({
@@ -129,5 +162,5 @@ module.exports = class {
         }
     }
 
-
+   
 }
