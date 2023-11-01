@@ -138,9 +138,9 @@ module.exports = class {
         try{
             console.log("%s : Reading Dowa structure...", moment().utc().format())
             const filter = req.params
-            const dowa_org_structure = []
 
-            
+            const sections = await this.section.Read(filter)
+            let Section = sections[0]
 
 
             let EPAs = await this.epa.ReadAll({EPACode:Section.EPA})
@@ -151,20 +151,21 @@ module.exports = class {
 
 
             const TAList = []
-            const Sections = []
+            const otherSections = []
 
             list.map(item=>{
                 !TAList.includes(item.TA) ? TAList.push(item.TA) : {}
             })
 
             list.map(item=>{
-                !Sections.includes(item.Section) ? Sections.push(item.Section) : {}
+                !otherSections.includes(item.Section) ? otherSections.push(item.Section) : {}
             })
 
 
             res.json({
                 epa:EPAs,
-                section:Sections,
+                section:Section,
+                otherSections,
                 ta: TAList,
                 villages:list,
                 constituency: [],
