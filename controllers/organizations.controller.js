@@ -169,7 +169,7 @@ module.exports = class {
             let Constituencies = []
             const ConstituenciesList = await this.dowa_constituency.ReadAll()
             ConstituenciesList.map(constituency=>{
-                !ConstituenciesList.includes(constituency) ? ConstituenciesList.push(constituency) : {}
+                !Constituencies.includes(constituency) ? Constituencies.push(constituency.Constituency) : {}
             })
 
             res.json({
