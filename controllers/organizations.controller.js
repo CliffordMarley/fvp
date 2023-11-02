@@ -180,7 +180,7 @@ module.exports = class {
                 !Constituencies.includes(item.Constituency) ? Constituencies.push(item.Constituency) : {}
 
                 if(!otherEPAs.includes({Constituency:item.Constituency, EPA: item.EPA})){
-                    otherEPAs.push({Constituency:item.Constituency, EPA: item.EPA})
+                    otherEPAs.push({District:item.District,Constituency:item.Constituency, EPA: item.EPA})
                 }
             })
 
