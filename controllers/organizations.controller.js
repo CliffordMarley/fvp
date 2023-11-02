@@ -171,7 +171,7 @@ module.exports = class {
 
             let Constituencies = []
             const trackerEPA = []
-            const ConstituenciesList = await this.dowa_constituency.ReadAll()
+            const ConstituenciesList = await this.dowa_constituency.Read({District:lists[0].District})
             ConstituenciesList.map(item=>{
                 !Constituencies.includes(item.Constituency) ? Constituencies.push(item.Constituency) : {}
 
