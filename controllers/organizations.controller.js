@@ -174,7 +174,7 @@ module.exports = class {
                 !Constituencies.includes(item.Constituency) ? Constituencies.push(item.Constituency) : {}
             })
 
-            otherEPAs = Constituencies.map(mapper=>{
+            otherEPAs = ConstituenciesList.map(mapper=>{
                 if(!trackerEPA.includes(mapper.EPA)){
                     trackerEPA.push(mapper.EPA)
                     otherEPAs.push({Constituency:mapper.Constituency, EPA: mapper.EPA})
