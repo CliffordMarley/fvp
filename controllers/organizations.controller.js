@@ -151,8 +151,12 @@ module.exports = class {
             let EPAs = await this.epa.Read({EPACode:Section.EPA})
             EPAs = EPAs[0]
             
-            console.log("Searching for org structure from EPA: ", EPAs.EPA_Name.toUpperCase())
-            let list = await this.org.ReadAll()
+            console.log("Reading Data from EPA: ", EPAs.EPA_Name.toUpperCase())
+            //Resolve districts
+            const districtFetch = await this.org.Read(EPA.EPA_Name.toUpperCase())
+            const District_Name = districtFetch[0].District
+            console.log("%s EPA belongs to %s District", EPAs.EPA_Name.toUpperCase(), District_Name)
+            let list = await this.org.Read({District: District_Name})
             //{EPA: EPAs.EPA_Name.toUpperCase()}
 
             console.log("Found %s records", list.length)
@@ -171,7 +175,7 @@ module.exports = class {
 
             let Constituencies = []
             const trackerEPA = []
-            const ConstituenciesList = await this.dowa_constituency.Read({District:list[0].District})
+            const ConstituenciesList = await this.dowa_constituency.Read({District:District_Name})
             ConstituenciesList.map(item=>{
                 !Constituencies.includes(item.Constituency) ? Constituencies.push(item.Constituency) : {}
 
