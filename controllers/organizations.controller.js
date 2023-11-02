@@ -142,6 +142,8 @@ module.exports = class {
             console.log("%s : Reading Dowa structure...", moment().utc().format())
             const filter = req.params
 
+            console.log(filter)
+
             const sections = await this.section.Read(filter)
             let Section = sections[0]
 
@@ -150,7 +152,7 @@ module.exports = class {
             EPAs = EPAs[0]
             
             console.log("Searching for org structure from EPA: ", EPAs.EPA_Name.toUpperCase())
-            let list = await this.org.Read()
+            let list = await this.org.ReadAll()
             //{EPA: EPAs.EPA_Name.toUpperCase()}
 
             console.log("Found %s records", list.length)
