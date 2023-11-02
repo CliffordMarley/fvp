@@ -150,13 +150,14 @@ module.exports = class {
             EPAs = EPAs[0]
             
             console.log("Searching for org structure from EPA: ", EPAs.EPA_Name.toUpperCase())
-            let list = await this.org.Read({EPA: EPAs.EPA_Name.toUpperCase()})
+            let list = await this.org.Read()
+            //{EPA: EPAs.EPA_Name.toUpperCase()}
 
             console.log("Found %s records", list.length)
 
-
             const TAList = []
             const otherSections = []
+            const otherEPAs  = []
 
             list.map(item=>{
                 !TAList.includes(item.TA) ? TAList.push(item.TA) : {}
@@ -167,15 +168,24 @@ module.exports = class {
             })
 
             let Constituencies = []
+            const trackerEPA = []
             const ConstituenciesList = await this.dowa_constituency.ReadAll()
             ConstituenciesList.map(item=>{
                 !Constituencies.includes(item.Constituency) ? Constituencies.push(item.Constituency) : {}
+            })
+
+            otherEPAs = Constituencies.map(mapper=>{
+                if(!trackerEPA.includes(mapper.EPA)){
+                    trackerEPA.push(mapper.EPA)
+                    otherEPAs.push({Constituency:mapper.Constituency, EPA: mapper.EPA})
+                }
             })
 
             res.json({
                 epa:EPAs,
                 section:Section,
                 otherSections,
+                otherEPAs,
                 ta: TAList,
                 villages:list,
                 constituency: Constituencies,
