@@ -153,7 +153,7 @@ module.exports = class {
             
             console.log("Reading Data from EPA: ", EPAs.EPA_Name.toUpperCase())
             //Resolve districts
-            const districtFetch = await this.org.Read(EPA.EPA_Name.toUpperCase())
+            const districtFetch = await this.org.Read(EPAs.EPA_Name.toUpperCase())
             const District_Name = districtFetch[0].District
             console.log("%s EPA belongs to %s District", EPAs.EPA_Name.toUpperCase(), District_Name)
             let list = await this.org.Read({District: District_Name})
