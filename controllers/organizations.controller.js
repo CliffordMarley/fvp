@@ -4,6 +4,8 @@ const EPAModel = require('../models/epa.model')
 const VillageModel = require("../models/village.model")
 const DistrictModel = require("../models/district.model")
 const ConstituencyModel = require("../models/constituency.model")
+const DowaConstituencyModel = require("../models/dowa_constituency")
+
 const GezettedVillageModel = require("../models/gazetted_village.model")
 const HouseholdModel = require("../models/household.model")
 
@@ -36,6 +38,7 @@ module.exports = class {
         this.gazetted_villages = new GezettedVillageModel()
         this.household = new HouseholdModel()
         this.org = new OrgModel()
+        this.dowa_constituency = new DowaConstituencyModel()
 
         this.cache = new RedisCache()
     }
@@ -163,7 +166,11 @@ module.exports = class {
                 !otherSections.includes(item.Section) ? otherSections.push(item.Section) : {}
             })
 
-            
+            let Constituencies = []
+            const ConstituenciesList = await this.dowa_constituency.ReadAll()
+            ConstituenciesList.map(constituency=>{
+                !ConstituenciesList.includes(constituency) ? ConstituenciesList.push(constituency) : {}
+            })
 
             res.json({
                 epa:EPAs,
@@ -171,7 +178,7 @@ module.exports = class {
                 otherSections,
                 ta: TAList,
                 villages:list,
-                constituency: [],
+                constituency: Constituencies,
                 district: {District_Name: list[0].District}
             })
         }catch(err){
