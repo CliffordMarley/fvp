@@ -10,7 +10,7 @@ module.exports = class HouseholdModel {
     async initialize() {
         try {
             await this.dbConnection.connect();
-            this.collection = this.dbConnection.getCollection('dowa_constituency_map');
+            this.collection = this.dbConnection.getCollection('dowa_contituency_map');
         } catch (err) {
             throw err;
         }
