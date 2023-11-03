@@ -183,7 +183,7 @@ module.exports = class {
             list.map(item=>{
                 let isThere = false
                 for(const record of otherEPAs){
-                    if(JSON.stringify(record) == JSON.stringify({Constituency:item.Constituency, EPA: item.EPA})){
+                    if(JSON.stringify(record) == JSON.stringify({Constituency:item.District, EPA: item.EPA})){
                         isThere = true
                         break
                     }
