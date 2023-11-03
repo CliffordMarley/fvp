@@ -177,19 +177,14 @@ module.exports = class {
             const trackerEPA = []
             const ConstituenciesList = await this.dowa_constituency.Read({District:District_Name})
             ConstituenciesList.map(item=>{
-                !Constituencies.includes(item.Constituency) ? Constituencies.push(item.Constituency) : {}
-
-                if(!otherEPAs.includes({Constituency:item.Constituency, EPA: item.EPA})){
-                    otherEPAs.push({District:item.District,Constituency:item.Constituency, EPA: item.EPA})
-                }
+                !Constituencies.includes(item.Constituency) ? Constituencies.push(item.Constituency) : {}                
             })
 
-            // ConstituenciesList.map(mapper=>{
-            //     if(!trackerEPA.includes(mapper.EPA)){
-            //         trackerEPA.push(mapper.EPA)
-            //         otherEPAs.push({Constituency:mapper.Constituency, EPA: mapper.EPA})
-            //     }
-            // })
+            list.map(item=>{
+                if(!otherEPAs.includes({Constituency:item.Constituency, EPA: item.EPA})){
+                    otherEPAs.push({District:item.District, EPA: item.EPA})
+                }
+            })
 
             res.json({
                 epa:EPAs,
