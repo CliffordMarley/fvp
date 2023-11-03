@@ -181,7 +181,14 @@ module.exports = class {
             })
 
             list.map(item=>{
-                if(!otherEPAs.includes({Constituency:item.Constituency, EPA: item.EPA})){
+                let isThere = false
+                for(const record of otherEPAs){
+                    if(JSON.stringify(record) == JSON.stringify({Constituency:item.Constituency, EPA: item.EPA})){
+                        isThere = true
+                        break
+                    }
+                }
+                if(!isThere){
                     otherEPAs.push({District:item.District, EPA: item.EPA})
                 }
             })
